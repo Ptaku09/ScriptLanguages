@@ -1,8 +1,9 @@
-from lab_3_a import count_res_code
+from lab_3_a import count_res_code_freq
 
 
 def count_404s():
-    count_res_code(404)
+    frequency = count_res_code_freq(404)
+    print(frequency)
 
 
 if __name__ == '__main__':

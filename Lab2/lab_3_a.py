@@ -3,7 +3,7 @@ import re
 from my_utils import is_line_valid
 
 
-def count_res_code(code):
+def count_res_code_freq(code):
     counter = 0
 
     while True:
@@ -18,4 +18,4 @@ def count_res_code(code):
         except EOFError:
             break
 
-    print(counter)
+    return counter
