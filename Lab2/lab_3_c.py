@@ -1,6 +1,6 @@
 import re
 
-from my_utils import is_line_valid
+from my_utils import is_line_valid, get_path
 
 
 def print_path_and_max_size():
@@ -30,10 +30,6 @@ def find_max_size():
             break
 
     return line_with_max_size, max_size
-
-
-def get_path(line):
-    return re.search(r"\".*\"", line).group().split(" ")[1]
 
 
 if __name__ == '__main__':
