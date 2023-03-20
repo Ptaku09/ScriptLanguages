@@ -19,7 +19,7 @@ def find_max_size():
 
             if not is_line_valid(line):
                 raise ValueError("Invalid line")
-            elif re.search(r" \d+$", line):
+            elif re.search(r"\d+$", line):
                 size = int(line.split()[-1])
 
                 if size > max_size:

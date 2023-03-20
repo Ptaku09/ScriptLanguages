@@ -11,7 +11,7 @@ def print_pl_requests():
             if not is_line_valid(line):
                 raise ValueError("Invalid line")
 
-            req_url = re.search(r"^.* - -", line).group()[:-4]
+            req_url = re.search(r"^(\S+)", line).group()
 
             if re.search(r".pl$", req_url):
                 print(line)
