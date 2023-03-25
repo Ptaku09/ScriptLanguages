@@ -87,6 +87,12 @@ def get_entries_by_extension(log, extension):
     return [e for e in log if e[3].endswith(f".{extension}")]
 
 
+# print_entries ---------------------------------
+def print_entries(log):
+    for e in log:
+        print(e)
+
+
 if __name__ == '__main__':
     tuples = read_log()
     # sorted_list = sort_log(tuples, 12)
@@ -95,11 +101,4 @@ if __name__ == '__main__':
     # failed_reads = get_failed_reads(tuples, True)
     founded_extensions = get_entries_by_extension(tuples, 'jpg')
 
-    for i in range(10):
-        print(founded_extensions[i])
-
-    # for i in range(10):
-    #     print(sorted_list[i])
-    #
-    # for entry in founded_addresses:
-    #     print(entry)
+    print_entries(founded_extensions)
