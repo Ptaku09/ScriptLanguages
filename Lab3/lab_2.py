@@ -93,12 +93,26 @@ def print_entries(log):
         print(e)
 
 
+# main ------------------------------------------
 if __name__ == '__main__':
     tuples = read_log()
-    # sorted_list = sort_log(tuples, 12)
-    # founded_addresses = get_entries_by_addr(tuples, 'ppp160.iadfw.net')
-    # founded_codes = get_entries_by_code(tuples, 500)
-    # failed_reads = get_failed_reads(tuples, True)
+    sorted_list = sort_log(tuples, 0)
+    founded_addresses = get_entries_by_addr(tuples, 'ppp160.iadfw.net')
+    founded_codes = get_entries_by_code(tuples, 500)
+    failed_reads = get_failed_reads(tuples, True)
     founded_extensions = get_entries_by_extension(tuples, 'jpg')
 
-    print_entries(founded_extensions)
+    print("Sorted log:")
+    print_entries(sorted_list[:20])
+
+    print("Founded addresses:")
+    print_entries(founded_addresses[:20])
+
+    print("Founded codes:")
+    print_entries(founded_codes[:20])
+
+    print("Failed reads:")
+    print_entries(failed_reads[-20:])
+
+    print("Founded extensions:")
+    print_entries(founded_extensions[:20])
