@@ -59,13 +59,29 @@ def get_entries_by_addr(log, addr):
         return []
 
 
+# get_entries_by_code ---------------------------
+def get_entries_by_code(log, code):
+    try:
+        if not code >= 100 and code <= 511:
+            raise ValueError("Invalid code")
+
+        return [e for e in log if e[5] == code]
+    except ValueError as e:
+        print(e)
+        return []
+
+
 if __name__ == '__main__':
     tuples = read_log()
-    sorted_list = sort_log(tuples, 12)
-    founded_addresses = get_entries_by_addr(tuples, 'ppp160.iadfw.net')
+    # sorted_list = sort_log(tuples, 12)
+    # founded_addresses = get_entries_by_addr(tuples, 'ppp160.iadfw.net')
+    founded_codes = get_entries_by_code(tuples, 500)
 
     for i in range(10):
-        print(sorted_list[i])
-        
-    for entry in founded_addresses:
-        print(entry)
+        print(founded_codes[i])
+
+    # for i in range(10):
+    #     print(sorted_list[i])
+    #
+    # for entry in founded_addresses:
+    #     print(entry)
