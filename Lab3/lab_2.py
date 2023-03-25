@@ -71,14 +71,26 @@ def get_entries_by_code(log, code):
         return []
 
 
+# get_failed_reads ------------------------------
+def get_failed_reads(log, concat=False):
+    client_errors = [e for e in log if 400 <= e[5] < 500]
+    server_errors = [e for e in log if 500 <= e[5] <= 511]
+
+    if concat:
+        return client_errors + server_errors
+
+    return client_errors, server_errors
+
+
 if __name__ == '__main__':
     tuples = read_log()
     # sorted_list = sort_log(tuples, 12)
     # founded_addresses = get_entries_by_addr(tuples, 'ppp160.iadfw.net')
-    founded_codes = get_entries_by_code(tuples, 500)
+    # founded_codes = get_entries_by_code(tuples, 500)
+    failed_reads = get_failed_reads(tuples, True)
 
     for i in range(10):
-        print(founded_codes[i])
+        print(failed_reads[i])
 
     # for i in range(10):
     #     print(sorted_list[i])
