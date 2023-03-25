@@ -82,15 +82,21 @@ def get_failed_reads(log, concat=False):
     return client_errors, server_errors
 
 
+# get_entries_by_extension ----------------------
+def get_entries_by_extension(log, extension):
+    return [e for e in log if e[3].endswith(f".{extension}")]
+
+
 if __name__ == '__main__':
     tuples = read_log()
     # sorted_list = sort_log(tuples, 12)
     # founded_addresses = get_entries_by_addr(tuples, 'ppp160.iadfw.net')
     # founded_codes = get_entries_by_code(tuples, 500)
-    failed_reads = get_failed_reads(tuples, True)
+    # failed_reads = get_failed_reads(tuples, True)
+    founded_extensions = get_entries_by_extension(tuples, 'jpg')
 
     for i in range(10):
-        print(failed_reads[i])
+        print(founded_extensions[i])
 
     # for i in range(10):
     #     print(sorted_list[i])
