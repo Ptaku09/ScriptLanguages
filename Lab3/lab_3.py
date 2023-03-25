@@ -24,3 +24,8 @@ def log_to_dict(log):
             dictionary[e[0]].append(entry_to_dict(e))
 
     return dictionary
+
+
+# get_addrs -------------------------
+def get_addrs(dictionary):
+    return list(dictionary)
