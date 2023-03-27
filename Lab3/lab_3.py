@@ -1,4 +1,7 @@
 # entry_to_dict ---------------------
+import functools
+
+from lab_2 import read_log
 
 
 def entry_to_dict(entry):
@@ -29,3 +32,26 @@ def log_to_dict(log):
 # get_addrs -------------------------
 def get_addrs(dictionary):
     return list(dictionary)
+
+
+# print_dict_entry_dates
+def print_dict_entry_dates(dictionary):
+    for key, value in dictionary.items():
+        print(f"ip / name: {key}")
+        print(f"requests: {len(value)}")
+
+        value.sort(key=lambda x: x["datetime"])
+
+        print(f"first request: {value[0]['datetime']}")
+        print(f"last request: {value[-1]['datetime']}")
+
+        founded_302s = functools.reduce(lambda acc, x: acc + 1 if x["status code"] == 302 else acc, value, 0)
+
+        print(f"ratio of 302s: {round(founded_302s / len(value), 2)}\t{founded_302s / len(value)}")
+        print("\n--------------------------------------\n")
+
+
+if __name__ == "__main__":
+    t = read_log()
+    d = log_to_dict(t)
+    print_dict_entry_dates(d)
