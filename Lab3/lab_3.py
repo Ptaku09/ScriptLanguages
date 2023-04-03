@@ -47,7 +47,7 @@ def print_dict_entry_dates(dictionary):
 
         founded_302s = functools.reduce(lambda acc, x: acc + 1 if x["status code"] == 302 else acc, value, 0)
 
-        print(f"ratio of 302s: {round(founded_302s / len(value), 2)}\t{founded_302s / len(value)}")
+        print(f"ratio of 302s: {round(founded_302s / len(value), 2)}")
         print("\n--------------------------------------\n")
 
 
