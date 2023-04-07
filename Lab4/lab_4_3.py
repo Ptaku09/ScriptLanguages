@@ -26,7 +26,7 @@ def analyze_files(path):
                 results.append(csv_as_dict)
 
         analyze_results(results)
-    except FileNotFoundError:
+    except (FileNotFoundError, NotADirectoryError):
         print('Invalid path')
 
 
