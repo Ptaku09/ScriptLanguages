@@ -2,7 +2,7 @@ import csv
 import sys
 from collections import Counter
 
-path = input("Podaj ścieżkę do pliku tekstowego: ")
+path = input()
 
 with open(path, "r") as file:
     content = file.read()
@@ -18,6 +18,6 @@ word_counts = Counter(content.split())
 most_common_word = word_counts.most_common(1)[0][0]
 
 writer = csv.writer(sys.stdout, delimiter=",")
-writer.writerow(["ścieżka do pliku", "liczba znaków", "liczba słów", "liczba wierszy", "znak najczęściej występujący",
-                 "słowo najczęściej występujące"])
+writer.writerow(
+    ["path", "number of chars", "number of words", "number of lines", "most common char", "most common word"])
 writer.writerow([path, num_chars, num_words, num_lines, most_common_char, most_common_word])
