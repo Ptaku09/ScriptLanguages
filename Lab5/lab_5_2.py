@@ -38,7 +38,7 @@ def get_message_type(message):
     if re.search(r'authentication failure', message):
         return MessageType.FAILED_LOGGING.value
 
-    if re.search(r'^Connection closed', message):
+    if re.search(r'Connection closed|session closed|Received disconnect|Disconnecting:|Connection reset', message):
         return MessageType.CONNECTION_CLOSED.value
 
     if re.search(r'^Failed password', message):
@@ -47,7 +47,7 @@ def get_message_type(message):
     if re.search(r'(^Invalid user|: invalid user)', message):
         return MessageType.WRONG_USERNAME.value
 
-    if re.search(r'ATTEMPT!$', message):
+    if re.search(r'BREAK-IN ATTEMPT!$', message):
         return MessageType.BREAK_IN_ATTEMPT.value
 
     return MessageType.OTHER.value
