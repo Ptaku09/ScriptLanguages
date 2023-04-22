@@ -21,7 +21,9 @@ def get_ipv4s_from_log(line):
 
 def get_user_from_log(line):
     message = line['message']
-    user = re.search(r'((?<=(user\s(?!request)))|(?<=((?<!getaddrinfo)\sfor\s(?!invalid)))|(?<=(\suser=)))\S+', message)
+    user = re.search(
+        r'((?<=(user\s(?!request)(?!authentication)))|(?<=((?<!getaddrinfo)\sfor\s(?!invalid)))|(?<=(\suser=)))\S+',
+        message)
 
     if user:
         return user.group(0)

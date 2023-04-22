@@ -2,9 +2,13 @@ import re
 
 
 def read_ssh_logs(log_file):
-    with open(log_file, 'r') as f:
-        logs = f.readlines()
-    return logs
+    try:
+        with open(log_file, 'r') as f:
+            logs = f.readlines()
+        return logs
+    except FileNotFoundError:
+        print('File not found')
+        exit(1)
 
 
 def parse_ssh_logs(logs):
