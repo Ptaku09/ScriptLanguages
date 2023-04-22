@@ -1,4 +1,5 @@
 import random
+import statistics
 
 from lab_5_1 import read_ssh_logs, parse_ssh_logs
 from lab_5_2 import get_user_from_log, get_message_type, MessageType
@@ -10,13 +11,31 @@ def group_logs_by_user(logs):
     for log in logs:
         user = get_user_from_log(log)
 
-        if user:
-            if user not in grouped_logs:
-                grouped_logs[user] = []
-
+        if user and user in grouped_logs:
             grouped_logs[user].append(log)
+        elif user:
+            grouped_logs[user] = [log]
 
     return grouped_logs
+
+
+def get_avg_session_time_and_stddev(logs):
+    opened = {}
+    times = []
+
+    for log in logs:
+        message_type = get_message_type(log['message'])
+
+        if message_type != MessageType.OTHER.value and message_type != MessageType.CONNECTION_CLOSED.value and log[
+            'pid'] not in opened:
+            opened[log['pid']] = log['date']
+        elif message_type == MessageType.CONNECTION_CLOSED.value and log['pid'] in opened:
+            time = abs((log['date'] - opened[log['pid']]).total_seconds())
+            times.append(time)
+
+            del opened[log['pid']]
+
+    return statistics.mean(times), statistics.stdev(times)
 
 
 def get_random_sample_from_random_user_logs(logs, n):
