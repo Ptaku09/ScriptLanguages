@@ -43,8 +43,8 @@ def get_message(line):
 
 
 if __name__ == '__main__':
-    lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/SSH.log')
+    lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/test.log')
     parsed = parse_ssh_logs(lines)
 
-    for line in parsed:
-        print(line)
+    for li in parsed:
+        print(li)
