@@ -4,50 +4,77 @@ import sys
 from lab_5_1 import read_ssh_logs, line_to_dict
 from lab_5_2 import get_message_type, MessageType
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-8s - %(message)s')
+def level_to_type(level):
+    if level == 'd':
+        return logging.DEBUG
 
-stdout_handler = logging.StreamHandler(sys.stdout)
-stdout_handler.setLevel(logging.DEBUG)
-stdout_handler.setFormatter(formatter)
+    if level == 'i':
+        return logging.INFO
 
-stderr_handler = logging.StreamHandler(sys.stderr)
-stderr_handler.setLevel(logging.ERROR)
-stderr_handler.setFormatter(formatter)
+    if level == 'w':
+        return logging.WARNING
 
-logger.addHandler(stdout_handler)
-logger.addHandler(stderr_handler)
+    if level == 'e':
+        return logging.ERROR
+
+    if level == 'c':
+        return logging.CRITICAL
 
 
-def log_message(log):
-    dict_log = line_to_dict(log)
-    message_type = get_message_type(dict_log['message'])
+def configure_logger(level=logging.DEBUG):
+    logger = logging.getLogger()
+    logger.setLevel(level)
 
-    logger.debug(f'Read bytes: {len(log.encode("utf-8"))}')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-8s - %(message)s')
 
-    if message_type == MessageType.SUCCESSFUL_LOGGING.value:
-        logger.info(MessageType.SUCCESSFUL_LOGGING.value)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(logging.DEBUG)
+    stdout_handler.setFormatter(formatter)
+    stdout_handler.addFilter(lambda record: record.levelno < logging.ERROR)
 
-    if message_type == MessageType.CONNECTION_CLOSED.value:
-        logger.info(MessageType.CONNECTION_CLOSED.value)
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    stderr_handler.setLevel(logging.ERROR)
+    stderr_handler.setFormatter(formatter)
 
-    if message_type == MessageType.FAILED_LOGGING.value:
-        logger.warning(MessageType.FAILED_LOGGING.value)
+    logger.addHandler(stdout_handler)
+    logger.addHandler(stderr_handler)
 
-    if message_type == MessageType.WRONG_PASSWORD.value:
-        logger.error(MessageType.WRONG_PASSWORD.value)
 
-    if message_type == MessageType.WRONG_USERNAME.value:
-        logger.error(MessageType.WRONG_USERNAME.value)
+def get_logger(level='d'):
+    configure_logger(level_to_type(level))
 
-    if message_type == MessageType.BREAK_IN_ATTEMPT.value:
-        logger.critical(MessageType.BREAK_IN_ATTEMPT.value)
+    def logger(log):
+        dict_log = line_to_dict(log)
+        message_type = get_message_type(dict_log['message'])
+
+        logging.debug(f'Read bytes: {len(log.encode("utf-8"))}')
+
+        if message_type == MessageType.SUCCESSFUL_LOGGING.value:
+            logging.info(MessageType.SUCCESSFUL_LOGGING.value)
+
+        if message_type == MessageType.CONNECTION_CLOSED.value:
+            logging.info(MessageType.CONNECTION_CLOSED.value)
+
+        if message_type == MessageType.FAILED_LOGGING.value:
+            logging.warning(MessageType.FAILED_LOGGING.value)
+
+        if message_type == MessageType.WRONG_PASSWORD.value:
+            logging.error(MessageType.WRONG_PASSWORD.value)
+
+        if message_type == MessageType.WRONG_USERNAME.value:
+            logging.error(MessageType.WRONG_USERNAME.value)
+
+        if message_type == MessageType.BREAK_IN_ATTEMPT.value:
+            logging.critical(MessageType.BREAK_IN_ATTEMPT.value)
+
+    return logger
 
 
 if __name__ == '__main__':
     lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/test.log')
+
+    log_message = get_logger('d')
 
     for li in lines:
         log_message(li)

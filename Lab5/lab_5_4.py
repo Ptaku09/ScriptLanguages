@@ -20,6 +20,19 @@ def group_logs_by_user(logs):
     return grouped_logs
 
 
+def get_random_sample_from_random_user_logs(logs, n):
+    grouped_logs = group_logs_by_user(logs)
+    random_user = random.choice(list(grouped_logs.keys()))
+
+    try:
+        random_sample = random.sample(grouped_logs[random_user], n)
+    except ValueError:
+        print('Not enough logs for user: ' + random_user)
+        random_sample = grouped_logs[random_user]
+
+    return random_sample
+
+
 def get_avg_session_time_and_stddev(logs):
     opened = {}
     times = []
@@ -73,20 +86,7 @@ def get_avg_session_time_and_stddev_per_user(logs):
     }
 
 
-def get_random_sample_from_random_user_logs(logs, n):
-    grouped_logs = group_logs_by_user(logs)
-    random_user = random.choice(list(grouped_logs.keys()))
-
-    try:
-        random_sample = random.sample(grouped_logs[random_user], n)
-    except ValueError:
-        print('Not enough logs for user: ' + random_user)
-        random_sample = grouped_logs[random_user]
-
-    return random_sample
-
-
-def least_and_most_active_user(logs):
+def least_and_most_active_users(logs):
     grouped_logs = group_logs_by_user(logs)
     max_success_logins = 0
     min_success_logins = float('inf')
