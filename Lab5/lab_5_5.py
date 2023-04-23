@@ -1,6 +1,7 @@
 import argparse
 
 from lab_5_1 import read_ssh_logs, line_to_dict
+from lab_5_1roz import detect_brute_force
 from lab_5_2 import get_ipv4s_from_log, get_user_from_log, get_message_type
 from lab_5_3 import get_logger
 from lab_5_4 import get_random_sample_from_random_user_logs, get_avg_session_time_and_stddev_per_user, \
@@ -27,6 +28,11 @@ subparser_connection.add_argument('-u', '--user', action='store_true',
                                   help='Get statistics for each user (ex_4_b_ii)')
 
 subparsers.add_parser('activity', help='Get least and most active users (ex_4_c)')
+
+subparser_brute_force = subparsers.add_parser('brute_force', help='Get brute force attempts (ex_1roz)')
+subparser_brute_force.add_argument('interval', type=int, help='Max interval between failed logins')
+subparser_brute_force.add_argument('-u', '--user', action='store_true',
+                                   help='Get brute force attempts for each user (ex_1roz)')
 
 args = parser.parse_args()
 
@@ -68,3 +74,8 @@ elif sub == 'connection':
         print(f'avg: {avg:.2f},\tstddev: {stddev:.2f}')
 elif sub == 'activity':
     least_and_most_active_users(parsed_logs)
+elif sub == 'brute_force':
+    if args.user:
+        detect_brute_force(parsed_logs, args.interval, True)
+    else:
+        detect_brute_force(parsed_logs, args.interval)
