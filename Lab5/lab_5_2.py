@@ -22,7 +22,7 @@ def get_ipv4s_from_log(line):
 def get_user_from_log(line):
     message = line['message']
     user = re.search(
-        r'((?<=(user\s(?!request)(?!authentication)))|(?<=((?<!getaddrinfo)\sfor\s(?!invalid)))|(?<=(\suser=)))\S+',
+        r'((?<=(user\s(?!request)(?!authentication)))|(?<=((?<!getaddrinfo)(?<!Thank you)\sfor\s(?!invalid)))|(?<=(\suser=)))\S+',
         message)
 
     if user:
@@ -35,11 +35,11 @@ def get_message_type(message):
     if re.search(r'^Accepted password', message):
         return MessageType.SUCCESSFUL_LOGGING.value
 
-    if re.search(r'authentication failure', message):
-        return MessageType.FAILED_LOGGING.value
-
     if re.search(r'Connection closed|session closed|Received disconnect|Disconnecting:|Connection reset', message):
         return MessageType.CONNECTION_CLOSED.value
+
+    if re.search(r'authentication failure;', message):
+        return MessageType.FAILED_LOGGING.value
 
     if re.search(r'^Failed password', message):
         return MessageType.WRONG_PASSWORD.value

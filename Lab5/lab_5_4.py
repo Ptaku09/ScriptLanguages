@@ -1,3 +1,4 @@
+import datetime
 import random
 import statistics
 
@@ -26,16 +27,50 @@ def get_avg_session_time_and_stddev(logs):
     for log in logs:
         message_type = get_message_type(log['message'])
 
+        # every message except connection closed and other indicates that connection was opened
         if message_type != MessageType.OTHER.value and message_type != MessageType.CONNECTION_CLOSED.value and log[
             'pid'] not in opened:
             opened[log['pid']] = log['date']
         elif message_type == MessageType.CONNECTION_CLOSED.value and log['pid'] in opened:
-            time = abs((log['date'] - opened[log['pid']]).total_seconds())
+            start_time = datetime.datetime.strptime(opened[log['pid']], '%b %d %H:%M:%S')
+            end_time = datetime.datetime.strptime(log['date'], '%b %d %H:%M:%S')
+            time = abs((start_time - end_time).total_seconds())
             times.append(time)
 
             del opened[log['pid']]
 
-    return statistics.mean(times), statistics.stdev(times)
+    return round(statistics.mean(times), 2), round(statistics.stdev(times), 2)
+
+
+def get_avg_session_time_and_stddev_per_user(logs):
+    opened = {}
+    user_times = {}
+
+    for log in logs:
+        message_type = get_message_type(log['message'])
+        user = get_user_from_log(log)
+
+        # every message except connection closed and other indicates that connection was opened
+        if user and message_type != MessageType.OTHER.value and message_type != MessageType.CONNECTION_CLOSED.value and \
+                log['pid'] not in opened:
+            opened[log['pid']] = user, log['date']
+        elif message_type == MessageType.CONNECTION_CLOSED.value and log['pid'] in opened:
+            user, con_opened = opened[log['pid']]
+            start_time = datetime.datetime.strptime(con_opened, '%b %d %H:%M:%S')
+            end_time = datetime.datetime.strptime(log['date'], '%b %d %H:%M:%S')
+            time = abs((start_time - end_time).total_seconds())
+
+            if user in user_times:
+                user_times[user].append(time)
+            else:
+                user_times[user] = [time]
+
+            del opened[log['pid']]
+
+    return {
+        user: (round(statistics.mean(times), 2), round(statistics.stdev(times), 2)) for user, times in
+        user_times.items() if len(times) > 1
+    }
 
 
 def get_random_sample_from_random_user_logs(logs, n):
@@ -91,9 +126,10 @@ if __name__ == '__main__':
     lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/SSH.log')
     parsed = parse_ssh_logs(lines)
 
-    random_logs = get_random_sample_from_random_user_logs(parsed, 3)
-
-    for lo in random_logs:
-        print(lo)
-
-    least_and_most_active_user(parsed)
+    # random_logs = get_random_sample_from_random_user_logs(parsed, 3)
+    #
+    # for lo in random_logs:
+    #     print(lo)
+    #
+    # least_and_most_active_user(parsed)
+    print(get_avg_session_time_and_stddev(parsed))
