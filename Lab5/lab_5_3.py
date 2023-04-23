@@ -9,9 +9,6 @@ def level_to_type(level):
     if level == 'd':
         return logging.DEBUG
 
-    if level == 'i':
-        return logging.INFO
-
     if level == 'w':
         return logging.WARNING
 
@@ -20,6 +17,8 @@ def level_to_type(level):
 
     if level == 'c':
         return logging.CRITICAL
+
+    return logging.INFO
 
 
 def configure_logger(level=logging.DEBUG):
