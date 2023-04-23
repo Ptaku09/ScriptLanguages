@@ -58,4 +58,7 @@ if __name__ == '__main__':
     parsed = parse_ssh_logs(lines)
 
     for li in parsed:
+        print("ipv4s:", '------', get_ipv4s_from_log(li))
+        print("user", '------', get_user_from_log(li))
         print(get_message_type(li['message']), '------', li['message'])
+        print()

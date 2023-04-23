@@ -104,7 +104,7 @@ def print_results(res):
 
 
 if __name__ == '__main__':
-    lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/SSH.log')
+    lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/test.log')
     parsed = parse_ssh_logs(lines)
 
-    detect_brute_force(parsed, 0.5)
+    detect_brute_force(parsed, 2, True)

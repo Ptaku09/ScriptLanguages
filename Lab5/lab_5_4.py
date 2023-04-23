@@ -123,13 +123,14 @@ def least_and_most_active_users(logs):
 
 
 if __name__ == '__main__':
-    lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/SSH.log')
+    lines = read_ssh_logs('/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/Lab5/test.log')
     parsed = parse_ssh_logs(lines)
+
+    least_and_most_active_users(parsed)
+
+    # print(get_avg_session_time_and_stddev(parsed))
 
     # random_logs = get_random_sample_from_random_user_logs(parsed, 3)
     #
     # for lo in random_logs:
     #     print(lo)
-    #
-    # least_and_most_active_user(parsed)
-    print(get_avg_session_time_and_stddev(parsed))

@@ -4,3 +4,4 @@
 **/*.pdf
 **/.idea
 **/__pycache__
+**/*.docx
