@@ -1,9 +1,10 @@
+import abc
 import ipaddress
 
 from utils import get_date, get_host_name, get_pid, is_line_valid, get_message, get_ipv4s_from_log
 
 
-class SSHLogEntry:
+class SSHLogEntry(metaclass=abc.ABCMeta):
     def __init__(self, line):
         if is_line_valid(line):
             self.line = line
@@ -24,6 +25,10 @@ class SSHLogEntry:
             return ipaddress.IPv4Address(ipv4s[0])
         else:
             return None
+
+    @abc.abstractmethod
+    def validate(self):
+        pass
 
 
 if __name__ == '__main__':

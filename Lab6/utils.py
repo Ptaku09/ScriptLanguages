@@ -1,4 +1,5 @@
 import re
+from enum import Enum
 
 
 def is_line_valid(line):
@@ -44,3 +45,25 @@ def get_port_from_log(message):
         return port.group(0)
     else:
         return None
+
+
+class MessageType(Enum):
+    FAILED_PASSWORD = 'Failed password'
+    ACCEPTED_PASSWORD = 'Accepted password'
+    ERROR = 'Error'
+    OTHER = 'Other'
+
+
+def get_message_type(line):
+    message = get_message(line)
+    
+    if re.search(r'^Failed password', message):
+        return MessageType.FAILED_PASSWORD
+
+    if re.search(r'^Accepted password', message):
+        return MessageType.ACCEPTED_PASSWORD
+
+    if re.search(r'^error:', message):
+        return MessageType.ERROR
+
+    return MessageType.OTHER
