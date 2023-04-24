@@ -24,3 +24,23 @@ def get_message(line):
 
 def get_ipv4s_from_log(message):
     return re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', message)
+
+
+def get_user_from_log(message):
+    user = re.search(
+        r'((?<=(user\s(?!request)(?!authentication)))|(?<=((?<!getaddrinfo)(?<!Thank you)\sfor\s(?!invalid)))|(?<=(\suser=)))\S+',
+        message)
+
+    if user:
+        return user.group(0)
+    else:
+        return None
+
+
+def get_port_from_log(message):
+    port = re.search(r'(?<=port\s)\d+', message)
+
+    if port:
+        return port.group(0)
+    else:
+        return None
