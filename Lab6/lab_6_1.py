@@ -36,7 +36,19 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
             return True
 
         return False
-    
+
+    def __repr__(self):
+        return f'SSHLogEntry(_line={self._line}, date={self.date}, host_name={self.host_name}, pid={self.pid}, message={self.message})'
+
+    def __eq__(self, other):
+        return self.pid == other.pid
+
+    def __lt__(self, other):
+        return int(self.pid) < int(other.pid)
+
+    def __gt__(self, other):
+        return int(self.pid) > int(other.pid)
+
 
 if __name__ == '__main__':
     l1 = SSHLogEntry('Mar 1 00:00:00 host sshd[123]: Invalid user user1 from 123.131.42.2')
