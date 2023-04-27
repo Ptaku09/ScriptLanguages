@@ -54,9 +54,7 @@ class MessageType(Enum):
     OTHER = 'Other'
 
 
-def get_message_type(line):
-    message = get_message(line)
-    
+def get_message_type(message):
     if re.search(r'^Failed password', message):
         return MessageType.FAILED_PASSWORD
 

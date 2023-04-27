@@ -12,7 +12,7 @@ class SSHLogFailedPassword(SSHLogEntry, ABC):
         self.port = get_port_from_log(super().message)
 
     def validate(self):
-        return get_message_type(super().line) == MessageType.FAILED_PASSWORD
+        return get_message_type(super().message) == MessageType.FAILED_PASSWORD
 
 
 class SSHLogAcceptedPassword(SSHLogEntry, ABC):
@@ -23,7 +23,7 @@ class SSHLogAcceptedPassword(SSHLogEntry, ABC):
         self.port = get_port_from_log(super().message)
 
     def validate(self):
-        return get_message_type(super().line) == MessageType.ACCEPTED_PASSWORD
+        return get_message_type(super().message) == MessageType.ACCEPTED_PASSWORD
 
 
 class SSHLogError(SSHLogEntry, ABC):
@@ -32,7 +32,7 @@ class SSHLogError(SSHLogEntry, ABC):
         self.ip = super().get_ipv4()
 
     def validate(self):
-        return get_message_type(super().line) == MessageType.ERROR
+        return get_message_type(super().message) == MessageType.ERROR
 
 
 class SSHLogOther(SSHLogEntry, ABC):

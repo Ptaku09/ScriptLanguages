@@ -7,7 +7,7 @@ from utils import get_date, get_host_name, get_pid, is_line_valid, get_message, 
 class SSHLogEntry(metaclass=abc.ABCMeta):
     def __init__(self, line):
         if is_line_valid(line):
-            self.line = line
+            self._line = line
             self.date = get_date(line)
             self.host_name = get_host_name(line)
             self.pid = get_pid(line)
@@ -30,6 +30,13 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
     def validate(self):
         pass
 
+    @property
+    def has_ip(self):
+        if self.get_ipv4():
+            return True
+
+        return False
+    
 
 if __name__ == '__main__':
     l1 = SSHLogEntry('Mar 1 00:00:00 host sshd[123]: Invalid user user1 from 123.131.42.2')
