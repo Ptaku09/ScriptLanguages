@@ -1,6 +1,6 @@
 from abc import ABC
 
-from lab_6_1 import SSHLogEntry
+from SSHLogEntry import SSHLogEntry
 from utils import get_user_from_log, get_port_from_log, MessageType, get_message_type
 
 
