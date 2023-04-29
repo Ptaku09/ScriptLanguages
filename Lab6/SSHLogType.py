@@ -38,6 +38,7 @@ class SSHLogError(SSHLogEntry, ABC):
 class SSHLogOther(SSHLogEntry, ABC):
     def __init__(self, line):
         super().__init__(line)
+        self.ip = self.get_ipv4()
 
     def validate(self):
         return True
