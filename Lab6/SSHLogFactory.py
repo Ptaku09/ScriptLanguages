@@ -32,3 +32,23 @@ class SSHLogErrorCreator(SSHLogCreator):
 class SSHLogOtherCreator(SSHLogCreator):
     def create_log(self, line) -> SSHLogEntry:
         return SSHLogOther(line)
+
+
+class SSHLogFactory:
+    def __init__(self):
+        self._creators = [
+            SSHLogFailedPasswordCreator(),
+            SSHLogAcceptedPasswordCreator(),
+            SSHLogErrorCreator(),
+            SSHLogOtherCreator()
+        ]
+
+    def create_log(self, line):
+        for creator in self._creators:
+            if creator.validate(line):
+                return creator.create_log(line)
+
+        raise ValueError("Log type not found")
+
+
+log_factory = SSHLogFactory()
