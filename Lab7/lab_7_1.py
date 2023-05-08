@@ -29,3 +29,11 @@ def newton_sqrt(x: float, epsilon: float) -> float:
     except TypeError:
         print("x and epsilon must be a number")
         exit(1)
+
+
+def make_alpha_dict(text: string) -> dict[string, list[string]]:
+    try:
+        return {letter: [word for word in text.split() if letter in word] for letter in text.replace(" ", "")}
+    except AttributeError:
+        print("you should provide a string")
+        exit(1)
