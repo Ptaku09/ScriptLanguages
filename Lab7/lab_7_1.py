@@ -2,16 +2,23 @@ import string
 
 
 def acronym(words: list[string]) -> string:
-    return "".join(["" if len(word[0]) == 0 else word[0] for word in words]).upper()
+    try:
+        return "".join(["" if len(word) == 0 else word[0] for word in words]).upper()
+    except TypeError:
+        print("words must be a list of strings")
+        exit(1)
 
 
 def median(numbers: list[int]) -> float:
-    numbers.sort()
-
-    if len(numbers) % 2 == 0:
-        return (numbers[len(numbers) // 2 - 1] + numbers[len(numbers) // 2]) / 2
-    else:
-        return numbers[len(numbers) // 2]
+    try:
+        numbers.sort()
+        if len(numbers) % 2 == 0:
+            return (numbers[len(numbers) // 2 - 1] + numbers[len(numbers) // 2]) / 2
+        else:
+            return numbers[len(numbers) // 2]
+    except TypeError:
+        print("numbers must be a list of numbers")
+        exit(1)
 
 
 def newton_sqrt(x: float, epsilon: float) -> float:
