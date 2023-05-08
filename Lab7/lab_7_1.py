@@ -12,3 +12,16 @@ def median(numbers: list[int]) -> float:
         return (numbers[len(numbers) // 2 - 1] + numbers[len(numbers) // 2]) / 2
     else:
         return numbers[len(numbers) // 2]
+
+
+def newton_sqrt(x: float, epsilon: float) -> float:
+    try:
+        y = x
+
+        while abs(y ** 2 - x) >= epsilon or y < 0:
+            y = (y + x / y) / 2
+
+        return y
+    except TypeError:
+        print("x and epsilon must be a number")
+        exit(1)
