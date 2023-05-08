@@ -12,10 +12,9 @@ def acronym(words: list[string]) -> string:
 def median(numbers: list[int]) -> float:
     try:
         numbers.sort()
-        if len(numbers) % 2 == 0:
-            return (numbers[len(numbers) // 2 - 1] + numbers[len(numbers) // 2]) / 2
-        else:
-            return numbers[len(numbers) // 2]
+
+        return (numbers[len(numbers) // 2 - 1] + numbers[len(numbers) // 2]) / 2 if len(numbers) % 2 == 0 else numbers[
+            len(numbers) // 2]
     except TypeError:
         print("numbers must be a list of numbers")
         exit(1)
@@ -23,12 +22,10 @@ def median(numbers: list[int]) -> float:
 
 def newton_sqrt(x: float, epsilon: float) -> float:
     try:
-        y = x
+        def newton_sqrt_rec(y: float) -> float:
+            return y if abs(y ** 2 - x) < epsilon and y >= 0 else newton_sqrt_rec((y + x / y) / 2)
 
-        while abs(y ** 2 - x) >= epsilon or y < 0:
-            y = (y + x / y) / 2
-
-        return y
+        return newton_sqrt_rec(x)
     except TypeError:
         print("x and epsilon must be a number")
         exit(1)
