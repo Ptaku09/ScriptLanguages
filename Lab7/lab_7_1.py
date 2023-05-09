@@ -37,3 +37,11 @@ def make_alpha_dict(text: string) -> dict[string, list[string]]:
     except AttributeError:
         print("you should provide a string")
         exit(1)
+
+
+def flatten(lst: list) -> list:
+    try:
+        return [elem for sublist in lst for elem in (flatten(sublist) if isinstance(sublist, list) else [sublist])]
+    except TypeError:
+        print("you should provide a list")
+        exit(1)
