@@ -12,4 +12,11 @@ def exists(pred, iterable):
     except TypeError:
         print("you should provide a predicate and an iterable")
         exit(1)
-       
+
+
+def atleast(n, pred, iterable):
+    try:
+        return sum(1 for x in iterable if pred(x)) >= n
+    except TypeError:
+        print("you should provide a number, a predicate and an iterable")
+        exit(1)
