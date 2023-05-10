@@ -11,14 +11,16 @@ def make_generator(func):
     return generator
 
 
+def fibo(n):
+    return n if n < 2 else fibo(n - 1) + fibo(n - 2)
+
+
+def get_n_elems(n, func):
+    return islice(make_generator(func)(), n)
+
+
 if __name__ == '__main__':
-    def fibo(n):
-        return n if n < 2 else fibo(n - 1) + fibo(n - 2)
-
-
-    fibo_generator = make_generator(fibo)
-    first_10_fibo = islice(fibo_generator(), 10)
-
+    first_10_fibo = get_n_elems(10, fibo)
     print('Fibonacci generator:')
 
     for i in first_10_fibo:
@@ -27,8 +29,7 @@ if __name__ == '__main__':
     print('------------------------')
     print('Numbers generator:')
 
-    number_generator = make_generator(lambda n: n * 5)
-    first_10_elems = islice(number_generator(), 10)
+    first_10_elems = get_n_elems(10, lambda n: n * 5)
 
     for i in first_10_elems:
         print(i)
