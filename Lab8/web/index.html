@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log browser</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik:wght@400;500;600">
+  <style>
+      body {
+          overflow: hidden;
+          background-color: white;
+          padding: 20px;
+          height: 400px;
+      }
+
+      *, *::before, *::after {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Rubik', sans-serif;
+      }
+
+      #path-form {
+          display: flex;
+          align-items: start;
+          justify-content: center;
+          flex-direction: column;
+          gap: .05rem;
+          padding-bottom: 15px;
+          border-bottom: 2px solid #a4b0be;
+      }
+
+      #path-form > label {
+          font-size: .8rem;
+          font-weight: 600;
+      }
+
+      #path-form > div {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: row;
+          gap: .8rem;
+      }
+
+      #path-input {
+          width: 100%;
+          height: 30px;
+          font-size: .9rem;
+          padding: 0 5px;
+          border-radius: 10px;
+          border: 1px solid #a4b0be;
+      }
+
+      #path-input:focus {
+          outline: none;
+      }
+
+      #path-submit {
+          width: 120px;
+          height: 30px;
+          border-radius: 10px;
+          border: none;
+          background-color: #6e72fc;
+          background-image: linear-gradient(315deg, #6e72fc 0%, #ad1deb 74%);
+          color: white;
+          font-weight: 600;
+          box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.25);
+      }
+
+      #path-submit:hover {
+          cursor: pointer;
+          background-image: linear-gradient(315deg, #888cfd 0%, #bf52e6 74%);
+      }
+
+      main {
+          background: red;
+          padding-top: 15px;
+          display: grid;
+          grid-template-columns: 1fr .7fr;
+          gap: 20px;
+      }
+
+      #logs-section {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+      }
+
+      #date-range-form {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+      }
+
+      .date-form-field {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+      }
+
+      .date-input {
+          width: 100%;
+          height: 30px;
+          font-size: .9rem;
+          padding: 0 5px;
+          border-radius: 10px;
+          border: 1px solid #a4b0be;
+          cursor: pointer;
+      }
+
+      #logs {
+          height: 100%;
+          padding: 2px 5px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          overflow-y: scroll;
+          border: 1px solid #a4b0be;
+          border-radius: 10px 0 0 10px;
+      }
+  </style>
+</head>
+<body>
+<form id="path-form">
+  <label for="path-input">Enter path to file:</label>
+  <div>
+    <input type="text" id="path-input" name="path" placeholder="eg. home/student/NASA" required>
+    <input type="submit" id="path-submit" value="Open">
+  </div>
+</form>
+<main>
+  <div id="logs-section">
+    <form id="date-range-form">
+      <div class="date-form-field">
+        <label for="start-date">From:</label>
+        <input type="date" id="start-date" class="date-input" name="start-date">
+      </div>
+      <div class="date-form-field">
+        <label for="end-date">To:</label>
+        <input type="date" id="end-date" class="date-input" name="end-date">
+      </div>
+    </form>
+    <div id="logs">
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+      <p>asd</p>
+    </div>
+  </div>
+  <div>
+    <label for="host">Remote host:</label>
+    <p id="host"></p>
+    <label for="date">Date:</label>
+    <p id="date"></p>
+    <div>
+      <label for="time">Time:</label>
+      <p id="time"></p>
+      <label for="timezone">Timezone:</label>
+      <p id="timezone"></p>
+    </div>
+    <div>
+      <label for="status-code">Status code:</label>
+      <p id="status-code"></p>
+      <label for="method">Method:</label>
+      <p id="method"></p>
+    </div>
+    <label for="resource">Resource:</label>
+    <p id="resource"></p>
+    <label for="size">Size:</label>
+    <p id="size"></p>
+  </div>
+</main>
+
+<script>
+  const pathForm = document.getElementById('path-form');
+  pathForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const path = new FormData(pathForm).get('path');
+
+    console.log(path);
+  });
+</script>
+
+<script type="text/javascript" src="../eel.js"></script>
+<!--<script src="./script.js"></script>-->
+</body>
+</html>
