@@ -11,7 +11,6 @@
           overflow: hidden;
           background-color: white;
           padding: 20px;
-          height: 400px;
       }
 
       *, *::before, *::after {
@@ -76,7 +75,8 @@
       }
 
       main {
-          background: red;
+          position: relative;
+          z-index: 2;
           padding-top: 15px;
           display: grid;
           grid-template-columns: 1fr .7fr;
@@ -100,7 +100,12 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 10px;
+          gap: 5px;
+      }
+
+      .date-label {
+          font-size: .8rem;
+          font-weight: 600;
       }
 
       .date-input {
@@ -114,14 +119,51 @@
       }
 
       #logs {
-          height: 100%;
-          padding: 2px 5px;
+          height: 320px;
+          background: rgba(255, 255, 255, 0.95);
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          overflow-y: scroll;
+          overflow-y: auto;
           border: 1px solid #a4b0be;
-          border-radius: 10px 0 0 10px;
+          box-shadow: 4px 5px 10px 0 rgba(0, 0, 0, 0.25);
+          border-radius: 10px;
+      }
+
+      #logs::-webkit-scrollbar {
+          width: 5px;
+          border-radius: 120px;
+      }
+
+      #logs::-webkit-scrollbar-thumb {
+          background: #a4b0be;
+          border-radius: 20px;
+          width: 5px;
+      }
+
+      #logs * {
+          padding: 5px 8px;
+          font-size: .8rem;
+          font-weight: 500;
+      }
+
+      #logs *:hover {
+          cursor: pointer;
+          background: #b2ccf4;
+      }
+
+      #blue-wave {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          z-index: 1;
+      }
+
+      #purple-wave {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          z-index: 0;
+          transform: translateY(-5px);
       }
   </style>
 </head>
@@ -137,11 +179,11 @@
   <div id="logs-section">
     <form id="date-range-form">
       <div class="date-form-field">
-        <label for="start-date">From:</label>
+        <label for="start-date" class="date-label">From:</label>
         <input type="date" id="start-date" class="date-input" name="start-date">
       </div>
       <div class="date-form-field">
-        <label for="end-date">To:</label>
+        <label for="end-date" class="date-label">To:</label>
         <input type="date" id="end-date" class="date-input" name="end-date">
       </div>
     </form>
@@ -187,6 +229,14 @@
     <p id="size"></p>
   </div>
 </main>
+<svg id="blue-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+  <path fill="#6e72fc" fill-opacity="1"
+        d="M0,192L48,170.7C96,149,192,107,288,106.7C384,107,480,149,576,176C672,203,768,213,864,213.3C960,213,1056,203,1152,176C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+</svg>
+<svg id="purple-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+  <path fill="#ad1deb" fill-opacity="1"
+        d="M0,192L48,170.7C96,149,192,107,288,106.7C384,107,480,149,576,176C672,203,768,213,864,213.3C960,213,1056,203,1152,176C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+</svg>
 
 <script>
   const pathForm = document.getElementById('path-form');
