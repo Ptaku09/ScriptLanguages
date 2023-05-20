@@ -85,6 +85,7 @@
 
 <script type="text/javascript" src="/eel.js"></script>
 <script>
+  // Listen for path form submission and fetch logs
   const pathForm = document.getElementById('path-form');
   pathForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -92,7 +93,30 @@
 
     eel.read_logs(path)(({status, logs}) => {
       if (status === 'success') {
+        // Display all fetched logs
         document.getElementById('logs').innerHTML = logs.map(log => `<p class="log">${log.slice(0, 50)}...</p>`).join('');
+
+        // Set start date to the first date in the logs
+        eel.get_js_date(logs[0])((date) => {
+          document.getElementById('start-date').valueAsDate = new Date(date);
+        });
+
+        // Set end date to the last date in the logs
+        eel.get_js_date(logs.at(-1))((date) => {
+          document.getElementById('end-date').valueAsDate = new Date(date);
+        });
+
+        // Listen for changes in date range and filter logs accordingly
+        const dateRangeForm = document.getElementById('date-range-form');
+        dateRangeForm.addEventListener('change', (e) => {
+          e.preventDefault();
+          const startDate = new FormData(dateRangeForm).get('start-date');
+          const endDate = new FormData(dateRangeForm).get('end-date');
+
+          eel.filter_logs_by_date(logs, startDate, endDate)((logs) => {
+            document.getElementById('logs').innerHTML = logs.map(log => `<p class="log">${log.slice(0, 50)}...</p>`).join('');
+          });
+        });
       } else {
         document.getElementById('logs').innerHTML = `<p id="not-found-err">File not found</p>`;
       }
