@@ -55,5 +55,80 @@ def parse_date_to_js_format(date):
     return f"{month}.{int(day) + 1}.{year}"
 
 
+@eel.expose
+def get_log_details(line):
+    if is_line_valid(line):
+        return {
+            "host": get_remote_host(line),
+            "date": get_date(line),
+            "time": get_time(line),
+            "timezone": get_timezone(line),
+            "status_code": get_status_code(line),
+            "method": get_method(line),
+            "resource": get_resource(line),
+            "size": get_size(line) + " bytes"
+        }
+    else:
+        return {
+            "host": "Line is not valid",
+            "date": "-",
+            "time": "-",
+            "timezone": "-",
+            "status_code": "-",
+            "method": "-",
+            "resource": "-",
+            "size": "-"
+        }
+
+
+def is_line_valid(line):
+    return re.search(r"^.* - - \[\d+/\w+/\d+:\d+:\d+:\d+ \S+] \".*\" \d{3} (\d+|-)$", line)
+
+
+def get_remote_host(line):
+    return re.search(r"^\S+", line).group()
+
+
+def get_time(line):
+    return re.search(r"(?<=:)\d+:\d+:\d+", line).group()
+
+
+def get_timezone(line):
+    return re.search(r"(\\+|-)\d{4}", line).group()
+
+
+def get_status_code(line):
+    fragment = re.search(r"\" \d{3} .*?$", line).group()  # get fragment from " to the end of the line, ex. " 200 6245
+
+    return re.search(r"\d{3}", fragment).group()  # status code is the first 3 digits
+
+
+def get_method(line):
+    method = re.search(r"(GET|POST|PUT|DELETE|HEAD|OPTIONS|CONNECT|TRACE)", line)
+
+    if method:
+        return method.group()
+
+    return ""
+
+
+def get_resource(line):
+    method_and_path = re.search(r"\".*\"", line).group()
+
+    if "/" not in method_and_path:
+        return ""
+
+    return re.search(r"/(\S+)?", method_and_path).group()  # (\S+) matches any non-whitespace character
+
+
+def get_size(line):
+    size = re.search(r"\d+$", line)
+
+    if size:
+        return size.group()
+
+    return 0
+
+
 # Start the index.html file
 eel.start("index.html", size=(800, 500))

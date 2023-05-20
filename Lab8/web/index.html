@@ -28,7 +28,7 @@
         <input type="date" id="end-date" class="date-input" name="end-date">
       </div>
     </form>
-    <div id="logs"></div>
+    <form id="logs"></form>
   </div>
   <div id="details">
     <h2 id="details-title">Details</h2>
@@ -102,7 +102,7 @@
     eel.read_logs(path)(({status, logs}) => {
       if (status === 'success') {
         // Display all fetched logs
-        document.getElementById('logs').innerHTML = logs.map(log => `<p class="log">${log.slice(0, 50)}...</p>`).join('');
+        displayLogs(logs);
 
         // Set start date to the first date in the logs
         eel.get_js_date(logs[0])((date) => {
@@ -114,6 +114,14 @@
           document.getElementById('end-date').valueAsDate = new Date(date);
         });
 
+        // Listen for changes in log selection and display log details
+        const logsForm = document.getElementById('logs');
+        logsForm.addEventListener('change', (e) => {
+          e.preventDefault();
+          const log = new FormData(logsForm).get('log');
+          showLogDetails(log);
+        });
+
         // Listen for changes in date range and filter logs accordingly
         const dateRangeForm = document.getElementById('date-range-form');
         dateRangeForm.addEventListener('change', (e) => {
@@ -121,15 +129,45 @@
           const startDate = new FormData(dateRangeForm).get('start-date');
           const endDate = new FormData(dateRangeForm).get('end-date');
 
-          eel.filter_logs_by_date(logs, startDate, endDate)((logs) => {
-            document.getElementById('logs').innerHTML = logs.map(log => `<p class="log">${log.slice(0, 50)}...</p>`).join('');
-          });
+          eel.filter_logs_by_date(logs, startDate, endDate)(displayLogs);
+          resetLogDetails();
         });
       } else {
         document.getElementById('logs').innerHTML = `<p id="not-found-err">File not found</p>`;
+        resetLogDetails();
       }
     });
   });
+
+  const displayLogs = (logs) => {
+    document.getElementById('logs').innerHTML = logs.map((log, index) =>
+      `<input id="log-${index}" type="radio" name="log" value='${log}' style="display: none"><label for="log-${index}">${log.slice(0, 50)}...</label>`
+    ).join('');
+  }
+
+  const showLogDetails = (log) => {
+    eel.get_log_details(log)((details) => {
+      document.getElementById('host').innerText = details['host'];
+      document.getElementById('date').innerText = details['date'];
+      document.getElementById('time').innerText = details['time'];
+      document.getElementById('timezone').innerText = details['timezone'];
+      document.getElementById('status-code').innerText = details['status_code'];
+      document.getElementById('method').innerText = details['method'];
+      document.getElementById('resource').innerText = details['resource'];
+      document.getElementById('size').innerText = details['size'];
+    });
+  }
+
+  const resetLogDetails = () => {
+    document.getElementById('host').innerText = '';
+    document.getElementById('date').innerText = '';
+    document.getElementById('time').innerText = '';
+    document.getElementById('timezone').innerText = '';
+    document.getElementById('status-code').innerText = '';
+    document.getElementById('method').innerText = '';
+    document.getElementById('resource').innerText = '';
+    document.getElementById('size').innerText = '';
+  }
 </script>
 </body>
 </html>
