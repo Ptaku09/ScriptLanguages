@@ -70,8 +70,8 @@
     </div>
   </div>
   <div id="nav-buttons">
-    <button class="nav-btn">Previous</button>
-    <button class="nav-btn">Next</button>
+    <button id="prev-btn" class="nav-btn">Previous</button>
+    <button id="next-btn" class="nav-btn">Next</button>
   </div>
 </main>
 <svg id="blue-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -139,6 +139,16 @@
     });
   });
 
+  document.getElementById('next-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    selectNextLog();
+  });
+
+  document.getElementById('prev-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    selectPreviousLog();
+  });
+
   const displayLogs = (logs) => {
     document.getElementById('logs').innerHTML = logs.map((log, index) =>
       `<input id="log-${index}" type="radio" name="log" value='${log}' style="display: none"><label for="log-${index}">${log.slice(0, 50)}...</label>`
@@ -167,6 +177,32 @@
     document.getElementById('method').innerText = '';
     document.getElementById('resource').innerText = '';
     document.getElementById('size').innerText = '';
+  }
+
+  const selectNextLog = () => {
+    const selectedLog = document.querySelector('input[name="log"]:checked');
+    if (selectedLog) {
+      // Next sibling twice because of the label
+      const nextLog = selectedLog.nextElementSibling.nextElementSibling;
+
+      if (nextLog && nextLog.type === 'radio') {
+        nextLog.checked = true;
+        showLogDetails(nextLog.value);
+      }
+    }
+  }
+
+  const selectPreviousLog = () => {
+    const selectedLog = document.querySelector('input[name="log"]:checked');
+    if (selectedLog) {
+      // Previous sibling twice because of the label
+      const previousLog = selectedLog.previousElementSibling.previousElementSibling;
+
+      if (previousLog && previousLog.type === 'radio') {
+        previousLog.checked = true;
+        showLogDetails(previousLog.value);
+      }
+    }
   }
 </script>
 </body>
