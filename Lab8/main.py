@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import eel
 
@@ -20,7 +20,7 @@ def filter_logs_by_date(logs, start_date, end_date):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d')
     return [log for log in logs if
-            start_date <= datetime.strptime(get_date(log), "%d/%b/%Y") <= end_date + timedelta(days=1)]
+            start_date <= datetime.strptime(get_date(log), "%d/%b/%Y") <= end_date]
 
 
 @eel.expose
