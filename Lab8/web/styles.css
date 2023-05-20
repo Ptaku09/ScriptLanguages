@@ -67,7 +67,7 @@ body {
 
 main {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     padding-top: 15px;
     display: grid;
     grid-template-columns: 1fr .8fr;
@@ -150,12 +150,28 @@ main {
     z-index: 1;
 }
 
-#purple-wave {
+#purple-wave-top {
     position: fixed;
     bottom: 0;
     left: 0;
     z-index: 0;
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+}
+
+#purple-wave-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    transform: translateY(55px);
+}
+
+#white-wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    transform: translateY(75px);
 }
 
 #details {
