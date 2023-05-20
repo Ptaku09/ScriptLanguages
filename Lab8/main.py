@@ -23,10 +23,6 @@ def filter_logs_by_date(logs, start_date, end_date):
             start_date <= datetime.strptime(get_date(log), "%d/%b/%Y") <= end_date + timedelta(days=1)]
 
 
-def get_date(line):
-    return re.search(r"\[\d+/\w+/\d+:", line).group()[1:-1]  # [1:-1] removes the unwanted characters
-
-
 @eel.expose
 def get_js_date(line):
     date_string = get_date(line)
@@ -89,6 +85,10 @@ def get_remote_host(line):
     return re.search(r"^\S+", line).group()
 
 
+def get_date(line):
+    return re.search(r"\[\d+/\w+/\d+:", line).group()[1:-1]  # [1:-1] removes the unwanted characters
+
+
 def get_time(line):
     return re.search(r"(?<=:)\d+:\d+:\d+", line).group()
 
@@ -127,7 +127,7 @@ def get_size(line):
     if size:
         return size.group()
 
-    return 0
+    return '0'
 
 
 # Start the index.html file
