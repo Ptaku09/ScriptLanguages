@@ -9,19 +9,35 @@ def is_line_valid(line: str) -> Optional[Match[str]]:
 
 
 def get_date(line: str) -> str:
-    return re.search(r'\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2}', line).group(0)
+    match = re.search(r'\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2}', line)
+    if match:
+        return match.group(0)
+    else:
+        raise ValueError("Invalid date format")
 
 
 def get_host_name(line: str) -> str:
-    return re.search(r'(?<=:\d{2} )\w+(?=\s)', line).group(0)
+    match = re.search(r'(?<=:\d{2} )\w+(?=\s)', line)
+    if match:
+        return match.group(0)
+    else:
+        raise ValueError("Invalid host name format")
 
 
 def get_pid(line: str) -> str:
-    return re.search(r'(?<=\[)\d+(?=])', line).group(0)
+    match = re.search(r'(?<=\[)\d+(?=])', line)
+    if match:
+        return match.group(0)
+    else:
+        raise ValueError("Invalid PID format")
 
 
 def get_message(line: str) -> str:
-    return re.search(r'(?<=]:\s).+', line).group(0)
+    match = re.search(r'(?<=]:\s).+', line)
+    if match:
+        return match.group(0)
+    else:
+        raise ValueError("Invalid message format")
 
 
 def get_ipv4s_from_log(message: str) -> List[str]:
@@ -29,30 +45,30 @@ def get_ipv4s_from_log(message: str) -> List[str]:
 
 
 def get_user_from_log(message: str) -> Optional[str]:
-    user: Match[str] = re.search(
+    user_match = re.search(
         r'((?<=(user\s(?!request)(?!authentication)))|(?<=((?<!getaddrinfo)(?<!Thank you)\sfor\s(?!invalid)))|(?<=(\suser=)))\S+',
         message)
 
-    if user:
-        return user.group(0)
+    if user_match:
+        return user_match.group(0)
     else:
         return None
 
 
 def get_port_from_log(message: str) -> Optional[str]:
-    port: Match[str] = re.search(r'(?<=port\s)\d+', message)
+    port_match = re.search(r'(?<=port\s)\d+', message)
 
-    if port:
-        return port.group(0)
+    if port_match:
+        return port_match.group(0)
     else:
         return None
 
 
 class MessageType(Enum):
-    FAILED_PASSWORD: str = 'Failed password'
-    ACCEPTED_PASSWORD: str = 'Accepted password'
-    ERROR: str = 'Error'
-    OTHER: str = 'Other'
+    FAILED_PASSWORD = 'Failed password'
+    ACCEPTED_PASSWORD = 'Accepted password'
+    ERROR = 'Error'
+    OTHER = 'Other'
 
 
 def get_message_type(message: str) -> MessageType:
