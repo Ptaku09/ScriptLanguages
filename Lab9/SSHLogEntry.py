@@ -1,6 +1,6 @@
 import abc
 import ipaddress
-from typing import Optional
+from typing import Optional, List
 
 from utils import get_date, get_host_name, get_pid, is_line_valid, get_message, get_ipv4s_from_log
 
@@ -20,7 +20,7 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
         return f'{self.date} {self.host_name} {self.pid} - {self.message}'
 
     def get_ipv4(self) -> Optional[ipaddress.IPv4Address]:
-        ipv4s: list[str] = get_ipv4s_from_log(self.message)
+        ipv4s: List[str] = get_ipv4s_from_log(self.message)
 
         if ipv4s:
             return ipaddress.IPv4Address(ipv4s[0])

@@ -1,6 +1,6 @@
 import re
 from enum import Enum
-from typing import Match, Optional
+from typing import Match, Optional, List
 
 
 def is_line_valid(line: str) -> Optional[Match[str]]:
@@ -24,7 +24,7 @@ def get_message(line: str) -> str:
     return re.search(r'(?<=]:\s).+', line).group(0)
 
 
-def get_ipv4s_from_log(message: str) -> list[str]:
+def get_ipv4s_from_log(message: str) -> List[str]:
     return re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', message)
 
 

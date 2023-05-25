@@ -1,6 +1,6 @@
 import ipaddress
 import re
-from typing import Iterator, Union
+from typing import Iterator, Union, List
 
 from SSHLogFactory import log_factory
 from SSHLogType import SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther
@@ -10,13 +10,13 @@ Log = Union[SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOth
 
 class SSHLogJournal:
     def __init__(self) -> None:
-        self.logs: list[Log] = []
+        self.logs: List[Log] = []
 
     def append(self, log: str) -> None:
         log_obj: Log = log_factory.create_log(log)
         self.logs.append(log_obj)
 
-    def get_logs_by_ip(self, ip: str) -> list[Log]:
+    def get_logs_by_ip(self, ip: str) -> List[Log]:
         if re.search(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip) is None:
             raise ValueError("Invalid IP address")
 

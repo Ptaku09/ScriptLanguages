@@ -1,4 +1,5 @@
 import abc
+from typing import List
 
 import SSHLogEntry
 from SSHLogType import SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther
@@ -36,7 +37,7 @@ class SSHLogOtherCreator(SSHLogCreator):
 
 class SSHLogFactory:
     def __init__(self) -> None:
-        self._creators: list[SSHLogCreator] = [
+        self._creators: List[SSHLogCreator] = [
             SSHLogFailedPasswordCreator(),
             SSHLogAcceptedPasswordCreator(),
             SSHLogErrorCreator(),
