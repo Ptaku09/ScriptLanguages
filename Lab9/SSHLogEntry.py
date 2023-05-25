@@ -1,25 +1,26 @@
 import abc
 import ipaddress
+from typing import Optional
 
 from utils import get_date, get_host_name, get_pid, is_line_valid, get_message, get_ipv4s_from_log
 
 
 class SSHLogEntry(metaclass=abc.ABCMeta):
-    def __init__(self, line):
+    def __init__(self, line: str) -> None:
         if is_line_valid(line):
-            self._line = line
-            self.date = get_date(line)
-            self.host_name = get_host_name(line)
-            self.pid = get_pid(line)
-            self.message = get_message(line)
+            self._line: str = line
+            self.date: str = get_date(line)
+            self.host_name: str = get_host_name(line)
+            self.pid: str = get_pid(line)
+            self.message: str = get_message(line)
         else:
             raise ValueError('Invalid line format')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.date} {self.host_name} {self.pid} - {self.message}'
 
-    def get_ipv4(self):
-        ipv4s = get_ipv4s_from_log(self.message)
+    def get_ipv4(self) -> Optional[ipaddress.IPv4Address]:
+        ipv4s: list[str] = get_ipv4s_from_log(self.message)
 
         if ipv4s:
             return ipaddress.IPv4Address(ipv4s[0])
@@ -27,26 +28,26 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
             return None
 
     @abc.abstractmethod
-    def validate(self):
+    def validate(self) -> None:
         pass
 
     @property
-    def has_ip(self):
+    def has_ip(self) -> bool:
         if self.get_ipv4():
             return True
 
         return False
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'SSHLogEntry(_line={self._line}, date={self.date}, host_name={self.host_name}, pid={self.pid}, message={self.message})'
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'SSHLogEntry') -> bool:
         return self.pid == other.pid
 
-    def __lt__(self, other):
+    def __lt__(self, other: 'SSHLogEntry') -> bool:
         return int(self.pid) < int(other.pid)
 
-    def __gt__(self, other):
+    def __gt__(self, other: 'SSHLogEntry') -> bool:
         return int(self.pid) > int(other.pid)
 
 
