@@ -2,12 +2,13 @@ import abc
 from typing import List
 
 from SSHLogEntry import SSHLogEntry
+from SSHLogJournal import Log
 from SSHLogType import SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther
 
 
 class SSHLogCreator(abc.ABC):
     @abc.abstractmethod
-    def create_log(self, line: str) -> SSHLogEntry:
+    def create_log(self, line: str) -> Log:
         pass
 
     def validate(self, line: str) -> bool:
@@ -16,22 +17,22 @@ class SSHLogCreator(abc.ABC):
 
 
 class SSHLogFailedPasswordCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogEntry:
+    def create_log(self, line: str) -> Log:
         return SSHLogFailedPassword(line)
 
 
 class SSHLogAcceptedPasswordCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogEntry:
+    def create_log(self, line: str) -> Log:
         return SSHLogAcceptedPassword(line)
 
 
 class SSHLogErrorCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogEntry:
+    def create_log(self, line: str) -> Log:
         return SSHLogError(line)
 
 
 class SSHLogOtherCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogEntry:
+    def create_log(self, line: str) -> Log:
         return SSHLogOther(line)
 
 
@@ -44,7 +45,7 @@ class SSHLogFactory:
             SSHLogOtherCreator()
         ]
 
-    def create_log(self, line: str) -> SSHLogEntry:
+    def create_log(self, line: str) -> Log:
         for creator in self._creators:
             if creator.validate(line):
                 return creator.create_log(line)

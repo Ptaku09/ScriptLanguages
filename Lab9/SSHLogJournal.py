@@ -12,17 +12,17 @@ class SSHLogJournal:
     def __init__(self) -> None:
         self.logs: List[Log] = []
 
-    def append(self, log: str) -> None:
-        log_obj: Log = log_factory.create_log(log)
+    def append(self, log_entry: str) -> None:
+        log_obj: Log = log_factory.create_log(log_entry)
         self.logs.append(log_obj)
 
-    def get_logs_by_ip(self, ip: str) -> List[Log]:
-        if re.search(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip) is None:
+    def get_logs_by_ip(self, ip_address: str) -> List[Log]:
+        if re.search(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip_address) is None:
             raise ValueError("Invalid IP address")
 
-        ip: ipaddress.IPv4Address = ipaddress.IPv4Address(ip)
+        ip_obj: ipaddress.IPv4Address = ipaddress.IPv4Address(ip_address)
 
-        return [log for log in self.logs if log.ip == ip]
+        return [log for log in self.logs if log.ip == ip_obj]
 
     def __len__(self) -> int:
         return len(self.logs)
@@ -38,10 +38,10 @@ if __name__ == '__main__':
     log_journal = SSHLogJournal()
 
     with open('test.log') as f:
-        log1 = f.readlines()
+        log_lines = f.readlines()
 
-        for log1 in log1:
-            log_journal.append(log1)
+        for log_line in log_lines:
+            log_journal.append(log_line)
 
     mixed_list = log_journal.get_logs_by_ip('185.190.58.151')
 
