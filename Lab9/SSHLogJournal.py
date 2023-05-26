@@ -1,11 +1,8 @@
 import ipaddress
 import re
-from typing import Iterator, Union, List
+from typing import Iterator, List
 
-from SSHLogFactory import log_factory
-from SSHLogType import SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther
-
-Log = Union[SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther]
+from SSHLogFactory import log_factory, Log
 
 
 class SSHLogJournal:

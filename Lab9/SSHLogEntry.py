@@ -20,11 +20,14 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
         return f'{self.date} {self.host_name} {self.pid} - {self.message}'
 
     def get_ipv4(self) -> Optional[ipaddress.IPv4Address]:
-        ipv4s: List[str] = get_ipv4s_from_log(self.message)
+        try:
+            ipv4s: List[str] = get_ipv4s_from_log(self.message)
 
-        if ipv4s:
-            return ipaddress.IPv4Address(ipv4s[0])
-        else:
+            if ipv4s:
+                return ipaddress.IPv4Address(ipv4s[0])
+            else:
+                return None
+        except ValueError:
             return None
 
     @abc.abstractmethod

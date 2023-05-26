@@ -1,9 +1,10 @@
 import abc
-from typing import List
+from typing import List, Union
 
 from SSHLogEntry import SSHLogEntry
-from SSHLogJournal import Log
 from SSHLogType import SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther
+
+Log = Union[SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther]
 
 
 class SSHLogCreator(abc.ABC):
