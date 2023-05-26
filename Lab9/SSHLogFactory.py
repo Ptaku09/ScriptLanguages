@@ -1,7 +1,7 @@
 import abc
 from typing import List
 
-import SSHLogEntry
+from SSHLogEntry import SSHLogEntry
 from SSHLogType import SSHLogFailedPassword, SSHLogAcceptedPassword, SSHLogError, SSHLogOther
 
 
@@ -16,22 +16,22 @@ class SSHLogCreator(abc.ABC):
 
 
 class SSHLogFailedPasswordCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogFailedPassword:
+    def create_log(self, line: str) -> SSHLogEntry:
         return SSHLogFailedPassword(line)
 
 
 class SSHLogAcceptedPasswordCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogAcceptedPassword:
+    def create_log(self, line: str) -> SSHLogEntry:
         return SSHLogAcceptedPassword(line)
 
 
 class SSHLogErrorCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogError:
+    def create_log(self, line: str) -> SSHLogEntry:
         return SSHLogError(line)
 
 
 class SSHLogOtherCreator(SSHLogCreator):
-    def create_log(self, line: str) -> SSHLogOther:
+    def create_log(self, line: str) -> SSHLogEntry:
         return SSHLogOther(line)
 
 
