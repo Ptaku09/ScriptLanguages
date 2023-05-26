@@ -1,6 +1,6 @@
 import abc
 import ipaddress
-from typing import Optional, List
+from typing import Optional, List, Union
 
 from utils import get_date, get_host_name, get_pid, is_line_valid, get_message, get_ipv4s_from_log
 
@@ -41,7 +41,9 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
     def __repr__(self) -> str:
         return f'SSHLogEntry(_line={self._line}, date={self.date}, host_name={self.host_name}, pid={self.pid}, message={self.message})'
 
-    def __eq__(self, other: 'SSHLogEntry') -> bool:
+    def __eq__(self, other: Union[object, 'SSHLogEntry']) -> bool:
+        if not isinstance(other, SSHLogEntry):
+            return NotImplemented
         return self.pid == other.pid
 
     def __lt__(self, other: 'SSHLogEntry') -> bool:
@@ -49,15 +51,3 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
 
     def __gt__(self, other: 'SSHLogEntry') -> bool:
         return int(self.pid) > int(other.pid)
-
-
-if __name__ == '__main__':
-    l1 = SSHLogEntry(
-        'Dec 10 09:09:56 LabSZ sshd[24421]: Failed password for invalid user admin from 185.190.58.151 port 41650 ssh2')
-    l2 = SSHLogEntry('Dec 10 09:10:03 LabSZ sshd[24421]: pam_unix(sshd:auth): check pass; user unknown')
-
-    print(repr(l1))
-    print(repr(l2))
-    print(l1 == l2)
-    print(l1 < l2)
-    print(l1 > l2)
