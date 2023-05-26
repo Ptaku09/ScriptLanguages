@@ -28,7 +28,7 @@ class SSHLogEntry(metaclass=abc.ABCMeta):
             return None
 
     @abc.abstractmethod
-    def validate(self) -> None:
+    def validate(self) -> bool:
         pass
 
     @property
