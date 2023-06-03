@@ -32,9 +32,11 @@ const displayStations = (stations) => {
 const showStationStats = (dbName, stationId) => {
   eel.calculate_statistics(dbName, stationId)((details) => {
     document.getElementById('time-from').innerText = details['mean_time_from'];
+    document.getElementById('time-to').innerText = details['mean_time_to'];
   });
 }
 
 const resetStationStats = () => {
   document.getElementById('time-from').innerText = '';
+  document.getElementById('time-to').innerText = '';
 }
