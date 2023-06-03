@@ -39,7 +39,7 @@ def validate():
         print('Wrong number of arguments')
         sys.exit(1)
 
-    if os.path.isfile(sys.argv[1]):
+    if os.path.isfile(f'{sys.argv[1]}.sqlite3'):
         print('File already exists')
         sys.exit(1)
 

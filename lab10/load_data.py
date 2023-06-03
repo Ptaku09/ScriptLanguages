@@ -35,10 +35,14 @@ def load_data(file_name, db_name):
 
 
 def validate_file(data):
-    required_columns = ['UID wynajmu', 'Numer roweru', 'Data wynajmu', 'Data zwrotu', 'Stacja wynajmu',
-                        'Stacja zwrotu', 'Czas trwania']
+    try:
+        required_columns = ['UID wynajmu', 'Numer roweru', 'Data wynajmu', 'Data zwrotu', 'Stacja wynajmu',
+                            'Stacja zwrotu', 'Czas trwania']
 
-    if not all(column in data.fieldnames for column in required_columns):
+        if not all(column in data.fieldnames for column in required_columns):
+            print('File with data has wrong format')
+            sys.exit(1)
+    except TypeError:
         print('File with data has wrong format')
         sys.exit(1)
 
@@ -63,6 +67,7 @@ def store_data(data, db_name):
         session.add_all(stations.values())
         session.add_all(rentals)
         session.commit()
+        print('Data loaded successfully')
 
 
 def extract_station(name, stations, session):
