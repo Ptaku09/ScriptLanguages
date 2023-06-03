@@ -1,0 +1,176 @@
+body {
+    overflow: hidden;
+    background-color: white;
+    padding: 20px;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+}
+
+#db-form {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: .05rem;
+    padding-bottom: 15px;
+    border-bottom: 2px solid gray;
+}
+
+#db-form > label {
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+#db-form > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: .8rem;
+}
+
+#db-input {
+    width: 100%;
+    height: 30px;
+    font-size: .9rem;
+    padding: 0 5px;
+    border-radius: 10px;
+    border: 1px solid gray;
+}
+
+#db-input:focus {
+    outline: none;
+}
+
+#db-submit {
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: #6e72fc;
+    background-image: linear-gradient(315deg, #6e72fc 0%, #ad1deb 74%);
+    color: white;
+    font-weight: 600;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.25);
+}
+
+#db-submit:hover {
+    cursor: pointer;
+    background-image: linear-gradient(315deg, #888cfd 0%, #bf52e6 74%);
+}
+
+main {
+    position: relative;
+    z-index: 10;
+    padding-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+#stations {
+    position: relative;
+    height: 280px;
+    background: rgba(255, 255, 255, 0.98);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border: 1px solid gray;
+    box-shadow: 4px 5px 10px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+#stations::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 120px;
+}
+
+#stations::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 20px;
+    width: 5px;
+}
+
+#stations * {
+    padding: 5px 8px;
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+#stations *:hover {
+    cursor: pointer;
+    background: #b2ccf4;
+}
+
+input[name="station"]:checked + label {
+    background: #b2ccf4;
+}
+
+#not-found-err {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: gray;
+}
+
+#stats {
+    padding-left: 20px;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 25px;
+    font-size: .8rem;
+}
+
+.stats-data {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-data > label {
+    font-style: italic;
+    text-decoration: underline;
+    color: gray;
+}
+
+#blue-wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#purple-wave-top {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    transform: translateY(-10px);
+}
+
+#purple-wave-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    transform: translateY(55px);
+}
+
+#white-wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    transform: translateY(75px);
+}
