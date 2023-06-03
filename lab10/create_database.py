@@ -3,27 +3,35 @@ import sys
 from datetime import datetime
 
 from sqlalchemy import create_engine, String, Integer, ForeignKey, DateTime
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
+from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
 
 
 class Base(DeclarativeBase):
     pass
 
 
-class Rentals(Base):
+class Rental(Base):
     __tablename__ = 'rentals'
     rental_id: Mapped[int] = mapped_column(primary_key=True)
     bike_number: Mapped[int] = mapped_column(Integer)
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
-    rental_station: Mapped[int] = mapped_column(ForeignKey('stations.station_id'))
-    return_station: Mapped[int] = mapped_column(ForeignKey('stations.station_id'))
+    rental_station_id: Mapped[int] = mapped_column(ForeignKey('stations.station_id'))
+    rental_station: Mapped['Station'] = relationship('Station', foreign_keys=[rental_station_id])
+    return_station_id: Mapped[int] = mapped_column(ForeignKey('stations.station_id'))
+    return_station: Mapped['Station'] = relationship('Station', foreign_keys=[return_station_id])
+
+    def __repr__(self):
+        return f'Rental(rental_id={self.rental_id!r}, bike_number={self.bike_number!r}, start_time={self.start_time!r} end_time={self.end_time!r})'
 
 
-class Stations(Base):
+class Station(Base):
     __tablename__ = 'stations'
     station_id: Mapped[int] = mapped_column(primary_key=True)
     station_name: Mapped[str] = mapped_column(String(50))
+
+    def __repr__(self):
+        return f'Station(station_id={self.station_id!r}, station_name={self.station_name!r})'
 
 
 def validate():
@@ -37,7 +45,7 @@ def validate():
 
 
 def create_database():
-    engine = create_engine(f'sqlite:///{sys.argv[1]}.sqlite3')
+    engine = create_engine(f'sqlite:///{sys.argv[1]}.sqlite3', echo=True)
     Base.metadata.create_all(engine)
 
 
