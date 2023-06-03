@@ -1,3 +1,4 @@
+import os
 import sys
 from datetime import datetime
 
@@ -25,6 +26,21 @@ class Stations(Base):
     station_name: Mapped[str] = mapped_column(String(50))
 
 
-if __name__ == '__main__':
+def validate():
+    if len(sys.argv) != 2:
+        print('Wrong number of arguments')
+        sys.exit(1)
+
+    if os.path.isfile(sys.argv[1]):
+        print('File already exists')
+        sys.exit(1)
+
+
+def create_database():
     engine = create_engine(f'sqlite:///{sys.argv[1]}.sqlite3')
     Base.metadata.create_all(engine)
+
+
+if __name__ == '__main__':
+    validate()
+    create_database()
