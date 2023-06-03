@@ -33,10 +33,12 @@ const showStationStats = (dbName, stationId) => {
   eel.calculate_statistics(dbName, stationId)((details) => {
     document.getElementById('time-from').innerText = details['mean_time_from'];
     document.getElementById('time-to').innerText = details['mean_time_to'];
+    document.getElementById('diff-bikes').innerText = details['different_bikes'];
   });
 }
 
 const resetStationStats = () => {
   document.getElementById('time-from').innerText = '';
   document.getElementById('time-to').innerText = '';
+  document.getElementById('diff-bikes').innerText = '';
 }

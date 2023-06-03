@@ -28,7 +28,8 @@ def calculate_statistics(db_name, station_id):
     with Session(engine) as session:
         return {
             'mean_time_from': mean_time_from(station_id, session),
-            'mean_time_to': mean_time_to(station_id, session)
+            'mean_time_to': mean_time_to(station_id, session),
+            'different_bikes': get_different_bikes(station_id, session)
         }
 
 
@@ -44,6 +45,13 @@ def mean_time_to(station_id, session):
     rentals = session.execute(select_statement).all()
 
     return calc_mean_time(rentals)
+
+
+def get_different_bikes(station_id, session):
+    select_statement = select(Rental).where(Rental.return_station_id == station_id)
+    rentals = session.execute(select_statement).all()
+
+    return len(set([rental[0].bike_number for rental in rentals]))
 
 
 def calc_mean_time(rentals):
