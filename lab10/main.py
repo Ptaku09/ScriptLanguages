@@ -29,7 +29,8 @@ def calculate_statistics(db_name, station_id):
         return {
             'mean_time_from': mean_time_from(station_id, session),
             'mean_time_to': mean_time_to(station_id, session),
-            'different_bikes': get_different_bikes(station_id, session)
+            'different_bikes': get_different_bikes(station_id, session),
+            'avg_rentals_per_month': get_avg_rentals_per_month(station_id, session),
         }
 
 
@@ -52,6 +53,17 @@ def get_different_bikes(station_id, session):
     rentals = session.execute(select_statement).all()
 
     return len(set([rental[0].bike_number for rental in rentals]))
+
+
+def get_avg_rentals_per_month(station_id, session):
+    select_statement = select(Rental).where(Rental.rental_station_id == station_id)
+    rentals = session.execute(select_statement).all()
+    monthly_rentals = [0 for _ in range(12)]
+
+    for rental in rentals:
+        monthly_rentals[rental[0].start_time.month - 1] += 1
+
+    return round(sum(monthly_rentals) / len(monthly_rentals), 2)
 
 
 def calc_mean_time(rentals):

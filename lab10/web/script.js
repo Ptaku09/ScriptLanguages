@@ -34,6 +34,7 @@ const showStationStats = (dbName, stationId) => {
     document.getElementById('time-from').innerText = details['mean_time_from'];
     document.getElementById('time-to').innerText = details['mean_time_to'];
     document.getElementById('diff-bikes').innerText = details['different_bikes'];
+    document.getElementById('avg-rentals').innerText = details['avg_rentals_per_month'];
   });
 }
 
@@ -41,4 +42,5 @@ const resetStationStats = () => {
   document.getElementById('time-from').innerText = '';
   document.getElementById('time-to').innerText = '';
   document.getElementById('diff-bikes').innerText = '';
+  document.getElementById('avg-rentals').innerText = '';
 }
