@@ -3,6 +3,8 @@ import sys
 import pygame
 
 from button import Button
+from input_box import InputBox
+from utils import get_font
 
 pygame.init()
 
@@ -12,11 +14,9 @@ pygame.display.set_caption("Tetris")
 bg = pygame.image.load("assets/images/background.jpg")
 
 
-def get_font(size):
-    return pygame.font.Font("assets/fonts/tetris.ttf", size)
-
-
 def configuration_screen():
+    username_input = InputBox((375, 300), 530, 60)
+
     while True:
         conf_mouse_pos = pygame.mouse.get_pos()
 
@@ -26,11 +26,21 @@ def configuration_screen():
         conf_rect = conf_text.get_rect(center=(640, 100))
         screen.blit(conf_text, conf_rect)
 
-        conf_back = Button(pos=(640, 460), text_input="BACK", font=get_font(75), base_color="White",
+        username_text = get_font(25).render("Username:", True, "White")
+        username_rect = username_text.get_rect(center=(490, 275))
+        screen.blit(username_text, username_rect)
+
+        conf_back = Button(pos=(500, 650), text_input="BACK", font=get_font(40), base_color="White",
                            hovering_color="#f0d467")
 
-        conf_back.change_color(conf_mouse_pos)
-        conf_back.update(screen)
+        conf_play = Button(pos=(780, 650), text_input="PLAY", font=get_font(40), base_color="White",
+                           hovering_color="#f0d467")
+
+        for button in [conf_back, conf_play]:
+            button.change_color(conf_mouse_pos)
+            button.update(screen)
+
+        username_input.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -39,6 +49,11 @@ def configuration_screen():
             if event.type == pygame.MOUSEBUTTONUP:
                 if conf_back.check_for_input(conf_mouse_pos):
                     menu_screen()
+                if conf_play.check_for_input(conf_mouse_pos):
+                    t = username_input.get_text()
+                    print(t)
+
+            username_input.handle_event(event)
 
         pygame.display.update()
 
@@ -55,7 +70,6 @@ def results_screen():
 
         results_back = Button(pos=(640, 460), text_input="BACK", font=get_font(75), base_color="White",
                               hovering_color="#f0d467")
-
         results_back.change_color(results_mouse_pos)
         results_back.update(screen)
 
@@ -73,7 +87,7 @@ def results_screen():
 def menu_screen():
     while True:
         menu_mouse_pos = pygame.mouse.get_pos()
-        
+
         screen.blit(bg, (0, 0))
 
         menu_text = get_font(100).render("TETRIS", True, "#f1c40f")
