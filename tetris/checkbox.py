@@ -16,10 +16,6 @@ class Checkbox:
         self.checkbox_obj = pygame.Rect(self.x, self.y, 20, 20)
         self.checked = False
 
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and self.checkbox_obj.collidepoint(event.pos):
-            self.checked = True if self.checked is False else False
-
     def draw(self, screen):
         if self.checked:
             pygame.draw.rect(screen, self.cc, self.checkbox_obj)
@@ -37,9 +33,3 @@ class Checkbox:
             return True
 
         return False
-
-    def uncheck(self):
-        self.checked = False
-
-    def is_checked(self):
-        return self.checked

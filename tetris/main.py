@@ -71,7 +71,7 @@ def configuration_screen():
             for checkbox in checkboxes:
                 if checkbox.check_for_input(event):
                     for c in checkboxes:
-                        c.uncheck()
+                        c.checked = False
                     checkbox.checked = True
 
             username_input.handle_event(event)
