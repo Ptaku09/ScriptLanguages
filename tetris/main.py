@@ -1,54 +1,111 @@
-import pygame as py
+import sys
+
+import pygame
 
 from button import Button
-from screen import Screen
+
+pygame.init()
+
+screen = pygame.display.set_mode((1280, 720))
+pygame.display.set_caption("Tetris")
+
+bg = pygame.image.load("assets/images/background.jpg")
 
 
-def launch_game():
-    py.init()
-    py.font.init()
-
-    menu_screen = Screen('Menu Screen')
-    conf_screen = Screen('Configuration Screen')
-
-    menu_screen.make_current_screen()
-
-    play_button = Button(150, 150, 150, 50, (255, 250, 250), (255, 0, 0), (255, 255, 255), 'Play')
-    control_button = Button(150, 150, 150, 50, (0, 0, 0), (0, 0, 255), (255, 255, 255), 'Back')
-
-    done = False
-
-    while not done:
-        for event in py.event.get():
-            menu_screen.screen_update()
-            conf_screen.screen_update()
-
-            mouse_pos = py.mouse.get_pos()
-            mouse_click = py.mouse.get_pressed()
-
-            if menu_screen.check_update((25, 0, 255)):
-                control_bar_button = play_button.focus_check(mouse_pos, mouse_click)
-                play_button.show_button(menu_screen.screen)
-
-                if control_bar_button:
-                    conf_screen.make_current_screen()
-                    menu_screen.end_current_screen()
-
-            elif conf_screen.check_update((255, 0, 255)):
-                return_back = control_button.focus_check(mouse_pos, mouse_click)
-                control_button.show_button(conf_screen.screen)
-
-                if return_back:
-                    conf_screen.end_current_screen()
-                    menu_screen.make_current_screen()
-
-            if event.type == py.QUIT:
-                done = True
-
-        py.display.update()
-
-    py.quit()
+def get_font(size):
+    return pygame.font.Font("assets/fonts/tetris.ttf", size)
 
 
-if __name__ == '__main__':
-    launch_game()
+def configuration_screen():
+    while True:
+        conf_mouse_pos = pygame.mouse.get_pos()
+
+        screen.blit(bg, (0, 0))
+
+        conf_text = get_font(45).render("CONFIGURATION", True, "White")
+        conf_rect = conf_text.get_rect(center=(640, 100))
+        screen.blit(conf_text, conf_rect)
+
+        conf_back = Button(pos=(640, 460), text_input="BACK", font=get_font(75), base_color="White",
+                           hovering_color="#f0d467")
+
+        conf_back.change_color(conf_mouse_pos)
+        conf_back.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                if conf_back.check_for_input(conf_mouse_pos):
+                    menu_screen()
+
+        pygame.display.update()
+
+
+def results_screen():
+    while True:
+        results_mouse_pos = pygame.mouse.get_pos()
+
+        screen.blit(bg, (0, 0))
+
+        results_text = get_font(45).render("BEST RESULTS", True, "White")
+        results_rect = results_text.get_rect(center=(640, 100))
+        screen.blit(results_text, results_rect)
+
+        results_back = Button(pos=(640, 460), text_input="BACK", font=get_font(75), base_color="White",
+                              hovering_color="#f0d467")
+
+        results_back.change_color(results_mouse_pos)
+        results_back.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                if results_back.check_for_input(results_mouse_pos):
+                    menu_screen()
+
+        pygame.display.update()
+
+
+def menu_screen():
+    while True:
+        menu_mouse_pos = pygame.mouse.get_pos()
+        
+        screen.blit(bg, (0, 0))
+
+        menu_text = get_font(100).render("TETRIS", True, "#f1c40f")
+        menu_rect = menu_text.get_rect(center=(640, 100))
+        screen.blit(menu_text, menu_rect)
+
+        play_button = Button(pos=(640, 250), text_input="PLAY", font=get_font(75), base_color="White",
+                             hovering_color="#f0d467")
+        results_button = Button(pos=(640, 400), text_input="BEST RESULTS", font=get_font(75), base_color="White",
+                                hovering_color="#f0d467")
+        quit_button = Button(pos=(640, 550), text_input="QUIT", font=get_font(75), base_color="White",
+                             hovering_color="#f0d467")
+
+        for button in [play_button, results_button, quit_button]:
+            button.change_color(menu_mouse_pos)
+            button.update(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if play_button.check_for_input(menu_mouse_pos):
+                    configuration_screen()
+                if results_button.check_for_input(menu_mouse_pos):
+                    results_screen()
+                if quit_button.check_for_input(menu_mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
+menu_screen()
