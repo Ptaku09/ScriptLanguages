@@ -3,8 +3,9 @@ import sys
 import pygame
 
 from button import Button
+from checkbox import Checkbox
 from input_box import InputBox
-from utils import get_font
+from utils import get_font, FieldSize
 
 pygame.init()
 
@@ -16,6 +17,11 @@ bg = pygame.image.load("assets/images/background.jpg")
 
 def configuration_screen():
     username_input = InputBox((375, 300), 530, 60)
+
+    small_field_checkbox = Checkbox((430, 500), text=FieldSize.SMALL.value)
+    medium_field_checkbox = Checkbox((580, 500), text=FieldSize.MEDIUM.value)
+    large_field_checkbox = Checkbox((730, 500), text=FieldSize.LARGE.value)
+    checkboxes = [small_field_checkbox, medium_field_checkbox, large_field_checkbox]
 
     while True:
         conf_mouse_pos = pygame.mouse.get_pos()
@@ -30,6 +36,10 @@ def configuration_screen():
         username_rect = username_text.get_rect(center=(490, 275))
         screen.blit(username_text, username_rect)
 
+        field_size_text = get_font(25).render("Field size:", True, "White")
+        field_size_rect = field_size_text.get_rect(center=(520, 470))
+        screen.blit(field_size_text, field_size_rect)
+
         conf_back = Button(pos=(500, 650), text_input="BACK", font=get_font(40), base_color="White",
                            hovering_color="#f0d467")
 
@@ -39,6 +49,9 @@ def configuration_screen():
         for button in [conf_back, conf_play]:
             button.change_color(conf_mouse_pos)
             button.update(screen)
+
+        for checkbox in checkboxes:
+            checkbox.draw(screen)
 
         username_input.draw(screen)
 
@@ -51,7 +64,15 @@ def configuration_screen():
                     menu_screen()
                 if conf_play.check_for_input(conf_mouse_pos):
                     t = username_input.get_text()
-                    print(t)
+                    c = [c for c in checkboxes if c.checked][0]
+                    print(t, c.text)
+
+            # make sure only one checkbox is checked
+            for checkbox in checkboxes:
+                if checkbox.check_for_input(event):
+                    for c in checkboxes:
+                        c.uncheck()
+                    checkbox.checked = True
 
             username_input.handle_event(event)
 
