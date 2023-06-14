@@ -1,18 +1,19 @@
+import random
+
 # All possible shapes of blocks come from this 4x4 matrix:
 # 0   1    2   3
 # 4   5    6   7
 # 8   9   10  11
 # 12  13  14  15
 possible_shapes = [
-    [0, 1, 4, 5],  # Square
-    [0, 1, 2, 3],  # Line
-    [0, 1, 5, 6],  # L
-    [0, 1, 2, 6],  # Reverse L
-    [0, 1, 2, 5],  # T
-    [0, 1, 2, 4],  # S
-    [1, 2, 4, 5],  # Z
-    [1, 5, 9, 13],  # Vertical Line
-    [2, 6, 9, 10, 11],  # big reversed T
+    [[1, 5, 9, 13], [4, 5, 6, 7]],  # I
+    [[4, 5, 9, 10], [2, 6, 5, 9]],  # Z
+    [[6, 7, 9, 10], [1, 5, 6, 10]],  # S
+    [[1, 2, 5, 9], [0, 4, 5, 6], [1, 5, 9, 8], [4, 5, 6, 10]],  # L
+    [[1, 2, 6, 10], [5, 6, 7, 9], [2, 6, 10, 11], [3, 5, 6, 7]],  # another L
+    [[1, 4, 5, 6], [1, 4, 5, 9], [4, 5, 6, 9], [1, 5, 6, 9]],  # small T
+    [[0, 1, 2, 5, 9], [0, 4, 5, 6, 8], [1, 5, 8, 9, 10], [2, 4, 5, 6, 10]],  # big T
+    [[1, 2, 5, 6]],  # square
 ]
 
 # Possible colors for blocks
@@ -24,3 +25,18 @@ possible_colors = [
     (243, 156, 18),  # Orange
     (231, 76, 60),  # Red
 ]
+
+
+class Block:
+    def __init__(self, pos, shape, color):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.shape = random.randint(0, len(possible_shapes) - 1)
+        self.color = random.choice(possible_colors)
+        self.rotation = 0
+
+    def image(self):
+        return possible_shapes[self.shape][self.rotation]
+
+    def rotate(self):
+        self.rotation = (self.rotation + 1) % len(possible_shapes[self.shape])
