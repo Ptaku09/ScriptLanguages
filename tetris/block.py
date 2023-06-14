@@ -12,12 +12,12 @@ possible_shapes = [
     [[1, 2, 5, 9], [0, 4, 5, 6], [1, 5, 9, 8], [4, 5, 6, 10]],  # L
     [[1, 2, 6, 10], [5, 6, 7, 9], [2, 6, 10, 11], [3, 5, 6, 7]],  # another L
     [[1, 4, 5, 6], [1, 4, 5, 9], [4, 5, 6, 9], [1, 5, 6, 9]],  # small T
-    [[0, 1, 2, 5, 9], [0, 4, 5, 6, 8], [1, 5, 8, 9, 10], [2, 4, 5, 6, 10]],  # big T
     [[1, 2, 5, 6]],  # square
 ]
 
 # Possible colors for blocks
 possible_colors = [
+    (0, 0, 0),  # Black
     (46, 204, 113),  # Green
     (52, 152, 219),  # Blue
     (155, 89, 182),  # Purple
@@ -28,11 +28,11 @@ possible_colors = [
 
 
 class Block:
-    def __init__(self, pos, shape, color):
+    def __init__(self, pos):
         self.x = pos[0]
         self.y = pos[1]
         self.shape = random.randint(0, len(possible_shapes) - 1)
-        self.color = random.choice(possible_colors)
+        self.color = random.randint(1, len(possible_colors) - 1)
         self.rotation = 0
 
     def image(self):

@@ -25,7 +25,7 @@ class Checkbox:
         font = get_font(self.fs)
         font_surf = font.render(self.text, True, self.color)
         w, h = font.size(self.text)
-        font_pos = (self.x + 12 / 2 - w / 2 + 65, self.y + 12 / 2 - h / 2 + 3)
+        font_pos = (self.x + 12 / 2 - w / 2 + 75, self.y + 12 / 2 - h / 2 + 3)
         screen.blit(font_surf, font_pos)
 
     def check_for_input(self, event):
