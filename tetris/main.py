@@ -7,7 +7,7 @@ from button import Button
 from checkbox import Checkbox
 from input_box import InputBox
 from tetris import GameStates, Tetris
-from utils import get_font, FieldSize, extract_field_size
+from utils import get_font, FieldSize, extract_field_size, store_result
 
 pygame.init()
 
@@ -89,6 +89,7 @@ def play_screen(username, field_size):
     fps = 25
     game = Tetris((640 - 30 * fs[1], 100), fs[0], fs[1])
     counter = 0
+    is_result_stored = False
 
     pressing_down = False
 
@@ -122,6 +123,10 @@ def play_screen(username, field_size):
                             hovering_color="#f0d467")
 
         if game.state == GameStates.END:
+            if not is_result_stored:
+                store_result(username, game.score, game.level - 1, field_size)
+                is_result_stored = True
+
             for button in [play_menu, play_again]:
                 button.change_color(play_mouse_pos)
                 button.update(screen)
@@ -186,6 +191,7 @@ def play_screen(username, field_size):
                     menu_screen()
                 if play_again.check_for_input(play_mouse_pos):
                     game.__init__((640 - 30 * fs[1], 100), fs[0], fs[1])
+                    is_result_stored = False
 
         pygame.display.update()
         clock.tick(fps)
