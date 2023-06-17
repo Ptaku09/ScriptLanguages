@@ -7,7 +7,7 @@ from button import Button
 from checkbox import Checkbox
 from input_box import InputBox
 from tetris import GameStates, Tetris
-from utils import get_font, FieldSize, extract_field_size, store_result
+from utils import get_font, FieldSize, extract_field_size, get_results, store_result
 
 pygame.init()
 
@@ -42,11 +42,21 @@ def configuration_screen():
         field_size_rect = field_size_text.get_rect(center=(520, 470))
         screen.blit(field_size_text, field_size_rect)
 
-        conf_back = Button(pos=(500, 650), text_input="BACK", font=get_font(40), base_color="White",
-                           hovering_color="#f0d467")
+        conf_back = Button(
+            pos=(500, 650),
+            text_input="BACK",
+            font=get_font(40),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
 
-        conf_play = Button(pos=(780, 650), text_input="PLAY", font=get_font(40), base_color="White",
-                           hovering_color="#f0d467")
+        conf_play = Button(
+            pos=(780, 650),
+            text_input="PLAY",
+            font=get_font(40),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
 
         for button in [conf_back, conf_play]:
             button.change_color(conf_mouse_pos)
@@ -68,7 +78,11 @@ def configuration_screen():
                     username = username_input.get_text()
                     username = "Player" if username == "" else username
                     selected = [c for c in checkboxes if c.checked]
-                    field_size = FieldSize.LARGE.value if len(selected) == 0 else selected[0].text
+                    field_size = (
+                        FieldSize.LARGE.value
+                        if len(selected) == 0
+                        else selected[0].text
+                    )
                     play_screen(username, field_size)
 
             # make sure only one checkbox is checked
@@ -116,15 +130,31 @@ def play_screen(username, field_size):
         player_rect.left = 680
         screen.blit(player_text, player_rect)
 
-        play_menu = Button(pos=(900, 550), text_input="MENU", font=get_font(40), base_color="White",
-                           hovering_color="#f0d467")
+        play_menu = Button(
+            pos=(900, 550),
+            text_input="MENU",
+            font=get_font(40),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
 
-        play_again = Button(pos=(900, 650), text_input="PLAY AGAIN", font=get_font(40), base_color="White",
-                            hovering_color="#f0d467")
+        play_again = Button(
+            pos=(900, 650),
+            text_input="PLAY AGAIN",
+            font=get_font(40),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
 
         if game.state == GameStates.END:
+            # store result to database
             if not is_result_stored:
-                store_result(username, game.score, game.level - 1, field_size)
+                store_result(
+                    username=username,
+                    field_size=field_size,
+                    game_level=game.level - 1,
+                    score=game.score,
+                )
                 is_result_stored = True
 
             for button in [play_menu, play_again]:
@@ -148,12 +178,28 @@ def play_screen(username, field_size):
         # draw the field and frozen blocks
         for i in range(game.height):
             for j in range(game.width):
-                pygame.draw.rect(screen, "White",
-                                 [game.x + game.zoom * j, game.y + game.zoom * i, game.zoom, game.zoom], 1)
+                pygame.draw.rect(
+                    screen,
+                    "White",
+                    [
+                        game.x + game.zoom * j,
+                        game.y + game.zoom * i,
+                        game.zoom,
+                        game.zoom,
+                    ],
+                    1,
+                )
                 if game.field[i][j] > 0:
-                    pygame.draw.rect(screen, possible_colors[game.field[i][j]],
-                                     [game.x + game.zoom * j + 1, game.y + game.zoom * i + 1, game.zoom - 2,
-                                      game.zoom - 1])
+                    pygame.draw.rect(
+                        screen,
+                        possible_colors[game.field[i][j]],
+                        [
+                            game.x + game.zoom * j + 1,
+                            game.y + game.zoom * i + 1,
+                            game.zoom - 2,
+                            game.zoom - 1,
+                        ],
+                    )
 
         # draw the falling block
         if game.block is not None:
@@ -161,10 +207,16 @@ def play_screen(username, field_size):
                 for j in range(4):
                     p = i * 4 + j
                     if p in game.block.image():
-                        pygame.draw.rect(screen, possible_colors[game.block.color],
-                                         [game.x + game.zoom * (j + game.block.x) + 1,
-                                          game.y + game.zoom * (i + game.block.y) + 1,
-                                          game.zoom - 2, game.zoom - 2])
+                        pygame.draw.rect(
+                            screen,
+                            possible_colors[game.block.color],
+                            [
+                                game.x + game.zoom * (j + game.block.x) + 1,
+                                game.y + game.zoom * (i + game.block.y) + 1,
+                                game.zoom - 2,
+                                game.zoom - 2,
+                            ],
+                        )
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -198,6 +250,8 @@ def play_screen(username, field_size):
 
 
 def results_screen():
+    results = get_results()
+
     while True:
         results_mouse_pos = pygame.mouse.get_pos()
 
@@ -207,10 +261,34 @@ def results_screen():
         results_rect = results_text.get_rect(center=(640, 100))
         screen.blit(results_text, results_rect)
 
-        results_back = Button(pos=(640, 460), text_input="BACK", font=get_font(75), base_color="White",
-                              hovering_color="#f0d467")
+        results_back = Button(
+            pos=(640, 650),
+            text_input="BACK",
+            font=get_font(40),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
         results_back.change_color(results_mouse_pos)
         results_back.update(screen)
+
+        result_text = get_font(24).render(
+            f"{'Nr':<4} {'Player':<18} {'Size':<7} {'Level':<6} {'Score':<10}", True, "Gray"
+        )
+        result_rect = result_text.get_rect()
+        result_rect.top = 170
+        result_rect.left = 100
+        screen.blit(result_text, result_rect)
+
+        for num, result in enumerate(results):
+            result_text = get_font(24).render(
+                f"{num + 1:<4} {result.__str__()}",
+                True,
+                "White" if num != 0 else "#f0d467",
+            )
+            result_rect = result_text.get_rect()
+            result_rect.top = 220 + num * 50
+            result_rect.left = 100
+            screen.blit(result_text, result_rect)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -233,12 +311,27 @@ def menu_screen():
         menu_rect = menu_text.get_rect(center=(640, 100))
         screen.blit(menu_text, menu_rect)
 
-        play_button = Button(pos=(640, 250), text_input="PLAY", font=get_font(75), base_color="White",
-                             hovering_color="#f0d467")
-        results_button = Button(pos=(640, 400), text_input="BEST RESULTS", font=get_font(75), base_color="White",
-                                hovering_color="#f0d467")
-        quit_button = Button(pos=(640, 550), text_input="QUIT", font=get_font(75), base_color="White",
-                             hovering_color="#f0d467")
+        play_button = Button(
+            pos=(640, 250),
+            text_input="PLAY",
+            font=get_font(75),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
+        results_button = Button(
+            pos=(640, 400),
+            text_input="BEST RESULTS",
+            font=get_font(75),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
+        quit_button = Button(
+            pos=(640, 550),
+            text_input="QUIT",
+            font=get_font(75),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
 
         for button in [play_button, results_button, quit_button]:
             button.change_color(menu_mouse_pos)

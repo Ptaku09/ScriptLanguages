@@ -1,4 +1,5 @@
-from sqlalchemy import Integer, String, create_engine
+from datetime import datetime
+from sqlalchemy import DateTime, Integer, String, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -13,7 +14,10 @@ class Result(Base):
     field_size: Mapped[str] = mapped_column(String(10))
     game_level: Mapped[int] = mapped_column(Integer)
     score: Mapped[int] = mapped_column(Integer)
-    date: Mapped[str] = mapped_column(String(20))
+    date: Mapped[datetime] = mapped_column(DateTime)
+
+    def __str__(self):
+        return f"{self.player_name:<16} - {self.field_size:<5} - {self.game_level:<4} - {self.score:<10}"
 
 
 engine = create_engine("sqlite:///results.sqlite3")

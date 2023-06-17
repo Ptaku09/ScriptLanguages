@@ -25,10 +25,17 @@ def store_result(username, field_size, game_level, score):
             field_size=field_size,
             game_level=game_level,
             score=score,
-            date=datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+            date=datetime.today().date(),
         )
         session.add(result)
         session.commit()
+
+
+def get_results():
+    engine = create_engine("sqlite:///results.sqlite3")
+
+    with Session(engine) as session:
+        return session.query(Result).order_by(Result.score.desc()).all()
 
 
 class FieldSize(Enum):
