@@ -31,11 +31,11 @@ def store_result(username, field_size, game_level, score):
         session.commit()
 
 
-def get_results():
+def get_results(limit):
     engine = create_engine("sqlite:///results.sqlite3")
 
     with Session(engine) as session:
-        return session.query(Result).order_by(Result.score.desc()).all()
+        return session.query(Result).order_by(Result.score.desc()).limit(limit)
 
 
 class FieldSize(Enum):

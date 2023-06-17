@@ -250,7 +250,7 @@ def play_screen(username, field_size):
 
 
 def results_screen():
-    results = get_results()
+    results = get_results(8)
 
     while True:
         results_mouse_pos = pygame.mouse.get_pos()
@@ -260,16 +260,6 @@ def results_screen():
         results_text = get_font(45).render("BEST RESULTS", True, "White")
         results_rect = results_text.get_rect(center=(640, 100))
         screen.blit(results_text, results_rect)
-
-        results_back = Button(
-            pos=(640, 650),
-            text_input="BACK",
-            font=get_font(40),
-            base_color="White",
-            hovering_color="#f0d467",
-        )
-        results_back.change_color(results_mouse_pos)
-        results_back.update(screen)
 
         result_text = get_font(24).render(
             f"{'Nr':<4} {'Player':<18} {'Size':<7} {'Level':<6} {'Score':<10}", True, "Gray"
@@ -289,6 +279,16 @@ def results_screen():
             result_rect.top = 220 + num * 50
             result_rect.left = 100
             screen.blit(result_text, result_rect)
+
+        results_back = Button(
+            pos=(640, 650),
+            text_input="BACK",
+            font=get_font(40),
+            base_color="White",
+            hovering_color="#f0d467",
+        )
+        results_back.change_color(results_mouse_pos)
+        results_back.update(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
