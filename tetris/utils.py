@@ -9,7 +9,7 @@ from database import Result
 
 
 def get_font(size):
-    return pygame.font.Font("assets/fonts/tetris.ttf", size)
+    return pygame.font.Font("/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/tetris/assets/fonts/tetris.ttf", size)
 
 
 def extract_field_size(field_size):

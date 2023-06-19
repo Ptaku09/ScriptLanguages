@@ -14,7 +14,9 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Tetris")
 
-bg = pygame.image.load("assets/images/background.jpg")
+bg = pygame.image.load(
+    "/Users/mateusz/Desktop/Studia/Semestr IV/[L] Języki skrytpowe/tetris/assets/images/background.jpg"
+)
 
 
 def configuration_screen():
@@ -262,7 +264,9 @@ def results_screen():
         screen.blit(results_text, results_rect)
 
         result_text = get_font(24).render(
-            f"{'Nr':<4} {'Player':<18} {'Size':<7} {'Level':<6} {'Score':<10}", True, "Gray"
+            f"{'Nr':<4} {'Player':<18} {'Size':<7} {'Level':<6} {'Score':<10}",
+            True,
+            "Gray",
         )
         result_rect = result_text.get_rect()
         result_rect.top = 170
